@@ -802,7 +802,7 @@ The beans that enforce security to the repository services based on the currentl
     To give permission to only Administrators to create site, change:
 
     ```text
-    org.alfresco.service.cmr.site.SiteService.createSite=ACL_ALLOW
+    org.alfresco.service.cmr.site.SiteService.createSite=ACL_METHOD.GROUP_SITE_CREATORS
     ```
 
     to
