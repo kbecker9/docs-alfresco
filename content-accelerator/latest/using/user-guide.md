@@ -82,6 +82,59 @@ A "Form" in the Content Accelerator provides an interface for completing and sub
 
 An example of a business scenario that utilizes the Content Accelerator Forms is the Policy and Procedure (PnP) scenario. Check out the PnP's action to Create a Change Form and or the Typical Use Case Scenarios for more information about a real world example using this Content Accelerator feature.
 
+### Form Fields
+
+This area will help you understand the various form controls that you'll encounter when filling out forms in Content Accelerator.
+
+#### Auto Complete
+
+Auto Complete is a text field that will give you completed text after you type a certain amount of characters. Below is an example of a participants list being filled in after typing 3 characters.
+
+![Autocomplete Field]({% link content-accelerator/images/aca-userguide-autocomplete-field.png %})
+
+#### Proximity Date Range
+
+The Proximity Date Range control allows you to select a date range that is relative to the current day. You can choose to search for items within a certain time frame, past the time frame, or in the next time frame.
+To use it, select the desired option from the dropdown list. Next, enter a number for the desired unit of measurement, such as days, weeks, or months. Finally, select the appropriate unit of measure from the list. This will define the range of dates you're searching for. Here's an example:
+
+![Proximity Date Range]({% link content-accelerator/images/aca-userguide-proximity-date-range.png %})
+
+### Form Field Attributes
+
+This section outlines the various attributes that can be assigned to form fields within the Content Accelerator platform.
+
+#### Repeating Field
+
+A Repeating Field is a field that allows you to provide multiple values. This type of field has an "Add" button next to the input to allow you to enter additional values. To remove a previously entered entry, click on the X next to it. Here's an example:
+
+![Repeating Field]({% link content-accelerator/images/aca-userguide-repeating-field.png %})
+
+#### Required Field
+
+A Required Field is a field that must be completed before the form can be submitted. These fields are marked with a red asterisk next to the field label. If you attempt to submit a form without completing all required fields, an error message will appear indicating which fields need to be completed. Here's an example of a Required Field:
+
+![Required Field]({% link content-accelerator/images/aca-userguide-required-field.png %})
+
+A submit button will not be able to be clicked until a required field is satisfied see below:
+
+![Required Field Needed]({% link content-accelerator/images/aca-userguide-still-needs-required-fields-or-validation.png %})
+
+Once a required field has been filled the button to submit the form will be available to be clicked again. See below:
+
+![Required Field Satisfied]({% link content-accelerator/images/aca-userguide-required-fields-statisfied.png %})
+
+#### Uneditable Field
+
+An Uneditable Field is a field that cannot be edited by the user. These fields are displayed in a grayed-out or disabled state to indicate that they are read-only. Additionally, you may notice a cancel icon over the field when highlighted, indicating that it cannot be edited. Here's an example:
+
+![Uneditable Field]({% link content-accelerator/images/aca-userguide-uneditable-field.png %})
+
+#### Validation Error
+
+A Validation Error may appear when a field has been filled out with an incorrect value. This is indicated by red text above the field, warning you of the issue. To correct the error, update the value in the field to satisfy the validation criteria. Here's an example:
+
+![Validation Error]({% link content-accelerator/images/aca-userguide-validation-error.png %})
+
 ### Navigation Bar
 
 The Content Accelerator Navigation Bar provides a user with links to important areas of the application, ability to execute commonly used actions quickly, notifications to allow for communication, and user preferences to customize the user experience. The Content Accelerator Navigation Bar comes with the following default areas detailed below, but can be customized by the administrator for the application.
@@ -610,7 +663,7 @@ Annotations are a very powerful collaboration tool that is integrated within thi
 
 The annotation tool can be used whenever a form or document is viewed (this viewer is configured by default).
 
-The advantage of using AEV is that it provides additional opportunities to provide feedback on a document. In addition, there are an abundance of use cases that AEV can tackle. During this section, only the particular use cases associated with the Pnp scenario will be highlighted.
+The advantage of using AEV is that it provides additional opportunities to provide feedback on a document. In addition, there are an abundance of use cases that AEV can tackle. During this section, only the particular use cases associated with the PnP scenario will be highlighted.
 
 To understand more of the use cases of AEV please refer to AEV's user guide or relevant documentation.
 
@@ -1092,7 +1145,10 @@ you to search for all possible documents in the repository.
 * The red box labeled `1` outlines the object type selector box. Here, you can choose between searching for Claim Folders or Claim Documents. Currently, we are searching for claim documents, as 'Claim Documents' is selected in the dropdown.
 * The orange box labeled `2` outlines the saved search input box. Before searching, you can select a pre-saved search from the dropdown list. A saved search stores the values of the previous form into an easy-to-remember text the user can define. This can save you from reentering all the criteria for searches you use everyday. To save a new search, type in the criteria for the search, execute the search, click the plus icon within the saved search input box, and input what you would like your search to be called. You can manage your saved searches from the User Preferences page.
 * The dark blue box labeled `3` outlines the full text search box. This field consists of two parts, the input box and the search button. The input box is where you enter any text that could match any property. The returned claims will have at least one property that matches the input text exactly. The button on the right of the box will execute the search. Additionally, the search button at the bottom of the form and the enter key will also execute the search.
-* The pink box labeled `4` outlines the attribute search tab. Within this tab, you can add criteria for properties you wish to search. Some properties' criteria can be selected from a dropdown or date picker. Others, such as Claim Number, need to be entered in manually. The results will return all items that match any part of the criteria for the respective property. If the property you wish to search on does not appear, check the more fields section at the bottom of the attribute search tab. Note that not all claim properties will appear in the form.
+* The pink box labeled `4` outlines the attribute search tab. Within this tab, you can add criteria for properties you wish to search. Some properties' criteria can be selected from a dropdown or date picker. Others, such as Claim Number, need to be entered in manually. The results will return all items that match any part of the criteria for the respective property. If the property you wish to search on does not appear, check the more fields section at the bottom of the attribute search tab. You can enable advance search capabilities in Attribute Search. See the next section for additional information on enabling [Advanced Search capabilities with Attribute Search](#advance-search-capabilities-with-attribute-search).
+
+  > **Note:** Not all claim properties will appear in the form.
+
 * The light blue box labeled `5` outlines the filters tab. After a search has already been run, this tab will populate with filters based on the result.
 
   ![Img Txt]({% link content-accelerator/images/aca-userguide-claims-mgmt7.png %})
@@ -1100,6 +1156,67 @@ you to search for all possible documents in the repository.
   Here, the results returned had 12 different values within the document category property. The number to the right represents the number of results that match the criteria stated on the left. Selecting the checkbox will remove all results from search results pane that do not match the criteria selected. The reset button at the top left removes all selected filters.
 
 * The purple box labeled `6` is where you can submit your search form, executing the search. This can also be done by clicking the search button in the full text search input box or by hitting the enter key while within the form. Clicking the reset button empties all previous entered criteria in the form without running another search.
+
+### Advance Search capabilities with Attribute Search
+
+Attribute Search includes the option to configure Advanced Search capabilities within the search form. To enable advanced capabilities in attribute search, navigate to the Attribute Search config in the Alfresco Content Accelerator Admin. By default, the values are set to `Disabled`:
+
+To enable advanced capabilities in attribute search, complete the following steps.
+
+1. Navigate to the Attribute Search config in the Alfresco Content Accelerator Admin and set the value of the Show Advanced Search parameter to Enabled. By default, the value is set to Disabled.
+
+    ![Advanced Search configuration]({% link content-accelerator/images/aca-show-advanced-search-config.png %})
+
+2. After you enable Advanced Search, you can enable the following configuration settings:
+
+    * Enable Any/All Search
+    * Enable Like/Exact/Not Search
+
+    ![Advanced Search additional configuration]({% link content-accelerator/images/aca-show-advanced-search-options-config.png %})
+
+When the **Enable Any/All Search** setting is enabled, you can configure either of the following settings.
+
+| Settings | Search operator |
+| -------- | --------------- |
+| ANY of these values | If you select this option, search is performed based on the `OR` operator |
+| ALL of these values |	If you select this option, search is performed based on the `AND` operator |
+
+If the **Enable Any/All Search** setting is disabled, `AND` operation is the default operation.
+
+When you enable the **Like/Exact/Not Search** setting, an additional control is added to the Attribute Search form. The control includes an advanced operator selection drop-down. This drop-down is only available to properties with control type `TextBox`, `AutoComplete`, and `DropDown`.
+
+The list of operators included in the drop-down is based on the associated property data type. The following table lists the data types and the operators associated with it.
+
+| Data type | Operators |
+| --------- | --------- |
+| String | `LOGIC_LIKE`, `OPERATOR_EQUALS`, `OPERATOR_NOT_EQUALS` |
+| Integer or Double | `OPERATOR_LESS_THAN`, `OPERATOR_EQUALS`, `OPERATOR_GREATER_THAN`, `OPERATOR_NOT_EQUALS` |
+
+The operators listed above are described below:
+
+* `LOGIC_LIKE` - Performs a wildcard (%) search 
+* `OPERATOR_EQUALS` - Performs a exact (=) value search
+* `OPERATOR_NOT_EQUALS` - Performs a not exact (-) value search
+* `OPERATOR_LESS_THAN` - The search returns results less than (<) the provided search term.
+* `OPERATOR_GREATER_THAN` - The search will return results greater than (>) the provided search term.
+
+If the **Like/Exact/Not Search** setting is disabled, the default operation depends on the object type. The following table lists the default operation based on the object types.
+
+| Object | Default operation |
+| ------ | ----------------- |
+| **AutoComplete** and **DropDown** | Exact search with case sensitivity |
+| **RadioButton** and **Cascading** | Exact search |
+| **TextBox** | The search depends on values set using “Make Search Exact” and “Case Sensitive Search” and if these values are not set, a wildcard search is performed. |
+
+> **Note:**
+>
+> * Advanced Search is deprecated in Content Accelerator 3.6. Though it is still available, Advanced Search feature in Attribute Search, described above, is expected to replace Advanced Search in future releases.
+>
+> * By enabling “Like/Exact/Not Search”, you override the settings for “Make Search Exact” and “Case Sensitive Search” for any property (if configured).
+>
+> * On a Property or Full text search, when any value is enclosed in double quotes, it is considered an exact search.
+>
+> * Popular special characters can be searched on Property and  Full text searches. How special characters are treated depends on tokenization and search index configuration. For additional information, see the [Alfresco Search Services documentation]({% link search-services/latest/index.md %}) and [Apache Solr Reference Guide](https://solr.apache.org/guide/solr/latest/index.html){:target="_blank"}. 
 
 #### Search Results Pane
 

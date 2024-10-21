@@ -25,11 +25,11 @@ The **Favorites** view shows all files and folders from the content repository t
 
 **Browse** contains the rest of the navigation structure. You can access your libraries, personal files, shared files and discarded files from this screen.
 
-* **Personal Files** retrieves all content from the logged in user's home area `/User Homes/<username>/` in the repository. If the user is an administrator who does not have a home folder then the repository root folder is shown.
+* **Personal Files** retrieves all content from the logged-in user's home area `/User Homes/<username>/` in the repository. If the user is an administrator who does not have a home folder then the repository root folder is shown.
 
 * **File Libraries** retrieves all the sites that the user is a member of, either public, moderated or private. File Libraries is the Libraries component, using the Sites API.
 
-* The **Shared Files** view aggregates all files that have been shared using the QuickShare feature in the content repository.
+* The **Shared Files** view aggregates all files that have been shared by a logged-in user using the QuickShare feature in the content repository.
 
 * The **Trash** view shows all the items that a user has deleted. An administrator can see items deleted by all users. The actions available in this view are **Restore** and **Permanently Delete**.
 
@@ -41,11 +41,18 @@ You can upload single or multiple files within the Mobile Workspace.
 
 2. Navigate to the **Personal Files** area.
 
-3. Tap the plus **+** button.
+3. Tap the floating action button (**+**).
 
 4. Tap **Upload Files**.
 
 This will open your file repository on your mobile device (for example, Files for iPhone users) where you can select files to upload. This will upload files to the Personal files area. If you want to upload to a specific folder, create a new folder first and upload from inside that folder.
+
+To upload photos, you can use the following options:
+
+ | Option | Description |
+ | -------- | ----------- |
+ | **Upload photos and videos** | Photos are automatically uploaded without EXIF metadata according to the device security system. |
+ | **Upload files** | Photos are uploaded with EXIF metadata. |
 
 ## Share files from another file system
 
@@ -60,6 +67,8 @@ You can share single or multiple files from a different file system with the Mob
 This will upload files to the Personal files area. If you want to upload to a specific folder, create a new folder first and then upload from inside that folder. Files can also be shared this way using the gallery with the Mobile Workspace.
 
 Open the Mobile Workspace to view your files.
+
+> **Note:** When uploading photos using this option, EXIF metadata is not preserved. To preserve the EXIF metadata, upload photos using the **Upload files** option. For more information, see [Upload files](#upload-files).
 
 * On the Recent Files view, a banner displays the sync progress for all files as a percentage complete. Tapping the sync status banner opens a Transfers view with all the files selected to be shared with the Mobile Workspace.
 * On the Transfers view, tap the **Sync All** button to force the files to upload. This is used to complete the transfer when files were shared without an internet connection or if the internet connection is lost.
@@ -131,7 +140,7 @@ You can move files within the Mobile Workspace.
 
 6. When all documents are scanned, select **Save**.
 
-    * The scan will be saved where you navigated.
+    * The scan is saved where you navigated.
     * If you do not wish to keep the scan, exit without saving. A dialog box will appear to confirm you want to discard the scan, select **Discard**. Select **Cancel** to return to save your scan.
 
 ## Tasks
@@ -232,3 +241,303 @@ You can add attachments to a task.
     > **Note:** You may need to scroll further down the page to see all the attachments.  
 
 ![Add attachment]({% link mobile-workspace/images/add-attachment.png %})
+
+## Share custom URLs
+
+You can share custom Workspace links provided by the URL Schema functionality. The link can go directly to a particular folder or files, for example **Personal Files**, **Custom Folder**, or **File Preview**. You'll first land in the mobile browser, and after that you'll be prompted to log in based on file permissions.
+
+1. Tap on the custom Workspace URL:
+
+    You're prompted to open the link with a browser.
+
+2. Select a browser to view the content:
+
+    * On iOS, you're asked to open the link using the Alfresco Mobile application (Alfresco Mobile Workspace) or download Mobile Workspace from the App Store.
+    * On Android, you're asked to open the link using the Alfresco Mobile application (Alfresco Mobile Workspace). Tap the link to open the Mobile app or you'll be redirected to the Play Store if the app is not installed.
+
+3. Tap **Open in App** to view the content in the Mobile Workspace application.
+
+> **Note:** File and URL access depend on permissions set in Mobile Workspace.
+
+## Workflow Management
+
+You can create and manage workflows within the Mobile Workspace. Workflows allow you to expand on the functionality provided by tasks by assigning a set of parameters to them. You can attach files to an existing workflow or create a new one using a file that has been added previously. Workflows can be assigned to an individual user or a group of users. 
+
+You can access workflows in two ways by either creating a workflow from the context menu of an existing file, or using the **Tasks** menu to set up the workflow. The **Tasks** section is divided into two parts: **Tasks** and **Workflows**.
+
+To set up a workflow, you can either:
+
+* Create a new workflow from the context menu of an existing file.
+* Starting from the **Workflows** tab, tap the floating action button (**+**), and then select a workflow.
+
+## Manage Forms
+
+You can manage a wide variety of forms directly from your mobile device. All standard form components are available in the Mobile Workspace, allowing you to complete a task by filling out forms tailored to your specific use case.   
+ 
+Forms in the Mobile Workspace are integrated into tasks within a workflow process. This enables you to enter, validate, and edit data, attach files, provide consent, and assign tasks to users seamlessly. 
+
+You can also distribute tasks among groups, allowing any member of the group to claim and work on a task.
+
+### Form Components
+
+The following components are included in the default form:
+
+* Text 
+* Multi-line text 
+* Number 
+* Checkbox 
+* Date 
+* Date and time 
+* Dropdown 
+* Amount 
+* Radio Buttons 
+* People 
+* Group of People 
+* Hyperlink 
+* Attach File 
+* Attach Folder 
+* Display value 
+* Display text 
+
+### Workflow with Task
+
+The workflow process manages the completion of all tasks in a specific sequence. You can view and filter workflow processes, start new ones, or track ongoing processes. The workflow process is complete when all associated tasks are finished.
+
+> **Note:** A workflow with a single task is completed once this task is finished.
+
+To initiate a workflow process and start completing tasks, see [Start a Workflow](#start-a-workflow).
+
+#### Start a Workflow
+
+To begin completing tasks within a workflow, you must first initiate the workflow.
+
+> **Note:** You can start workflows from either the context menu of an existing file or the **Tasks** menu.
+
+To start a workflow from the **Tasks** menu:
+
+1.	Log on to the Mobile Workspace. 
+
+2.	Tap **Tasks** and select the **Workflows** tab. 
+
+    The **Workflows** tab is displayed with a list of all active workflows assigned to you or created by you. 
+
+    ![Workflows tab]({% link mobile-workspace/images/workflows-tab.png %})
+
+3.	Tap the floating action button (**+**) to expand a list of workflows and select a workflow.
+
+    The **Start workflow** form is displayed to enter basic details. Available fields and components may vary depending on the workflow. 
+
+4.	Fill out the required fields. Required fields are marked with an asterisk.
+
+> **Note:** To start the workflow process, you must complete all required fields.
+
+5. Tap **Start workflow**. 
+
+    The workflow has been started, and it is listed in the Workflows tab under **Active**. 
+
+Once a workflow has been started, you can proceed to complete all tasks within it. To complete
+tasks, see [Complete Task Forms](#complete-task-forms).
+
+> **Note:** If a workflow process assigns tasks to groups (referred to as a pooled process), you must first
+claim the task before you can start working on it. For more information, see [Claim a Task](#claim-a-task).
+
+To view and filter workflows, see [View and Filter Workflows](#view-and-filter-workflows).
+
+#### View and Filter Workflows
+
+All workflows created by you or assigned to you are available from the **Tasks** menu. You can view workflow's details after selecting a workflow from the **Workflows** tab.
+
+Filtering options allow you to categorize workflows by their statuses: all, active, completed.
+
+To view and filter workflows:
+
+1. Log on to the Mobile Workspace.
+
+2. Tap **Tasks** and select the **Workflows** tab.
+
+3. To view all workflows, tap the downward-facing arrow next to **Active** and select **All**.
+
+    All active workflows are displayed.
+
+4. To view completed workflows, tap the downward-facing arrow and select **Completed**.
+
+    All completed workflows are displayed.
+
+5. To view details of a workflow, select the workflow from the list.
+
+    The following details of the selected workflow are displayed:
+
+    ![Workflow details]({% link mobile-workspace/images/workflow-details.png %})
+
+    | Detail | Description |
+    | ------ | ----------- |
+    | Start Date | Specifies the date when a workflow was started. |
+    | Started By | Specifies the person who started a workflow. |
+    | Status | Specifies the status of a workflow. The following statuses are available: active, completed. |
+    | Tasks | Specifies the number of tasks related to a workflow. |
+
+#### Claim a Task
+
+If a workflow assigns tasks to groups, you must first claim the task before you can start working on it.
+
+To claim a task:
+
+1. From the **Tasks** tab, select task status as **Queued** in the filter options.
+
+2. Tap **Apply**.
+
+    The **Tasks** screen is displayed with a task to claim at the top.
+
+3. Open a task and select **Claim**.
+
+    ![Claim the task]({% link mobile-workspace/images/claim-task.png %})
+    
+    The task is assigned to you, and you can start working on it.
+
+If you claim a task by mistake, you can release it. To release a task, see [Release a Task](#release-a-task).
+
+#### Release a Task 
+
+If you claim a task by mistake, you can release it.
+
+To release a task:
+
+1. From the **Workflows** tab, open a workflow.
+
+2. Tap **Tasks**.
+
+    The **Tasks** screen is displayed with a task to release at the top.
+
+4. Open a task and select **Release** from the **Actions**.
+
+    The task is available for other users in the group.
+
+#### Complete Tasks in Workflow
+
+Tasks within a workflow process are displayed sequentially, one by one. After you complete a task, the next task in a sequence will be automatically displayed for you to complete.
+
+To complete tasks:
+
+1. From the **Workflows** tab, open a workflow.
+    
+    The details of the workflow are displayed.
+
+2. Tap **Tasks**.
+
+    The Tasks screen is displayed with a task to complete at the top.
+
+3. Open the task and fill out the form. Available fields and components may vary depending on the task.
+
+    ![Task form]({% link mobile-workspace/images/task-form.png %})
+
+> **Note:** Tasks may require from you to add attachments. To upload files, see [Attach Files](#attach-files).
+
+4. Once you complete the form, do one of the following:
+
+    * To save the task without completing it, tap **Save**.
+         The task remains assigned to you, and you can perform additional work as needed.
+
+    * To complete the task, tap **Complete**.
+        The task is completed, the next task in the workflow is displayed.
+
+6. Repeat steps 3 through 4 to complete all the task forms.
+
+Once all the tasks are completed, the workflow is completed. 
+
+#### View and Edit Task Details
+
+You can view and edit task details in a workflow process.
+
+To view and edit task details:
+
+1. From the **Workflows** tab, open a workflow.
+
+    The details of the workflow are displayed.
+
+2. Tap **Tasks**.
+
+    The **Tasks** screen is displayed with a list of tasks.
+
+3. Open a task from the list.
+
+4. Tap the **info** icon in the upper-right corner.
+
+    The following details of the task are displayed in the **Task View** screen:
+
+    ![Task View screen with task's details]({% link mobile-workspace/images/task-view-details.png %})
+
+    | Detail | Description |
+    | ------ | ----------- |
+    | Description | Specifies the description of a task. |
+    | Due date | Specifies the date a task is due. |
+    | Priority | Specifies the priority of a task. Task priority colors are set as the following: Low (green), Medium (orange), and High (red). |
+    | Assignee | Specifies the person assigned to a task. |
+    | Status | Specifies the status of a workflow. The following statuses are available: active, completed. |
+    | Identifier | Specifies the unique number of a task. |
+
+4. Tap **Edit** in the upper-right corner to edit the details.
+
+5. Edit the details as needed and tap **Save**.
+
+    The changes are reflected in the **Task View** screen.
+
+#### Attach Files
+
+If a task requires you to attach files, you can attach the files by selecting the attachment icon ![attachment icon]({% link mobile-workspace/images/attachment-icon.png %}).
+
+To attach files:
+
+1. Open a task that requires adding attachments.
+
+![The Review and Upload Files task]({% link mobile-workspace/images/review-data-and-upload-files.png %})
+
+2. Select the attachment icon ![attachment icon]({% link mobile-workspace/images/attachment-icon.png %}).
+
+    The **Attached files** screen is displayed.
+
+3. Tap the floating action button (**+**) to expand the menu.
+
+4. Select one of the following options:
+
+    | Option | Description |
+    | ------ | ----------- |
+    | Take photos or videos | You can take a photo and upload it to a task. |
+    | Upload photos and videos | Photos are automatically uploaded without EXIF metadata according to the device security system. |
+    | Upload files | Files are uploaded. Photos are uploaded with EXIF metadata. |
+
+5. Select one or multiple files or photos and tap **Add(X)**, where **X** is the number of selected files or photos.
+
+    The files or photos are attached and listed in the **Attached files** screen.
+
+> **Note:** If an attachment section is designed to upload only one attachment, for example birth certificate, you can select only one file or photo.
+    
+6. Navigate to the task screen by tapping the left arrow.
+
+    The attachments are listed under headers.
+
+7. Once you finish attaching files, do one of the following:
+
+    * To save the task without completing it, tap **Save**.
+        The task remains assigned to you, and you can perform additional work or edit it as needed.
+
+    * To complete the task, tap **Complete**.
+        The task is completed, the next task in a sequence is displayed or the workflow is completed.
+
+#### Complete a Workflow
+
+A workflow is completed once all tasks within it are finished. To finish tasks, see [Complete Tasks in Workflow](#complete-tasks-in-workflow).
+
+## Multiple Selection
+
+You can select multiple files within the Mobile Workspace. Multiple Selection allows you to perform actions on multiple items. You can select up to 25 files in a page. The **Start Workflow** option will only work for files. The available actions will differ depending on your starting point. To begin Multiple Selecting, long press on any file.
+
+The following actions are available:
+
+* Add to Favorites
+* Start Workflow
+* Move
+* Make available offline
+* Move to Trash
+* Remove from Favorites
+* Restore
+* Delete Permanently

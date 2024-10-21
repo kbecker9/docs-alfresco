@@ -2,21 +2,22 @@
 title: Supported platforms
 ---
 
-The following are the supported platforms for Alfresco Federation Services 2.1:
-
-## Alfresco Content Services
+The following are the supported platforms for Alfresco Federation Services:
 
 | Version | Notes |
 | ------- | ----- |
-| Content Services 7.2 | |
-| Content Services 7.1 | |
-| Content Services 7.0 | |
+| Content Services 23.x | |
 | | |
 | **Java** | |
-| Oracle JRE 8 or later | |
+| Java JRE 17 | |
+| | |
+| **Databases** | |
+| MongoDB 6 | |
+| | |
+| **Application servers** | |
+| Tomcat 9 | |
 | | |
 | **Browsers** | |
-| Internet Explorer or Edge v8 or later | |
 | Chrome (latest) | |
 | Firefox (latest) | |
 | Safari (latest) | |

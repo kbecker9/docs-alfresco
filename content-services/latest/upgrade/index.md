@@ -8,7 +8,7 @@ Before performing an upgrade or applying a Service Pack, make sure you check the
 
 Care should be taken when upgrading from any previous releases of Content Services or Community Edition. There are some steps that should be reviewed and planned before you upgrade. Familiarize yourself with the guidance below and then plan your upgrade. In particular, ensure that the following steps are completed before you start:
 
-* Ensure that you have a functional [backup of your Alfresco repository and database]({% link content-services/latest/admin/backup-restore.md %}), before starting the upgrade process.
+* Ensure you are able to restore your repository and database to a fixed point in time before the upgrade begins. This would normally involve taking backups including a backup of the content store, but any mechanism that guarantees full restoration will work.
 * Download and run the [Alfresco Extension Inspector]({% link content-services/latest/develop/extension-inspector.md %}) to understand which customization or library items need to be reviewed or updated to support the upgrade.
 * Review all new and deprecated features included in the Release Notes. Customers can access these from [Hyland Community](https://community.hyland.com/){:target="_blank"}.
 * Review and implement the new [Supported platforms]({% link content-services/latest/support/index.md %}) options, and update as necessary for the new deployment. Also, check the general advice about [Supported Platforms and Languages](https://www.alfresco.com/services/subscription/supported-platforms){:target="_blank"} on our website.
@@ -21,16 +21,15 @@ When you upgrade Content Services, it's recommended that you follow a structured
 
 The following diagram shows the upgrade paths for major versions:
 
-![Upgrade paths to 7.3]({% link content-services/images/upgrade-path-7.3.png %})
+![Upgrade paths to 23.x]({% link content-services/images/upgrade-path-23.x.png %})
 
 The upgrade path recommendations are:
 
-* Direct upgrades to Content Services 7.3 are supported only from 5.2.x and later.
-* Content Services 7.3 introduces changes that require new releases of some modules. To upgrade to 7.3, you also need to update any of the module artifacts to which you're entitled. See [Supported platforms]({% link content-services/latest/support/index.md %}) for more details on the associated versions.
-* You must upgrade to a supported version of Alfresco Search Services before upgrading the repository to 7.3. See [Upgrade Search Services]({% link search-services/latest/upgrade/index.md %}) for more information.
-  * Upgrades from Content Services 5.2 must first upgrade from Solr 4 to Alfresco Search Services.
+* Direct upgrades to Content Services 23.x are supported only from 7.1 and later versions, using their latest patch release.
+* Content Services 23.x introduces changes that require new releases of some modules. To upgrade to 23.x, you also need to update any of the module artifacts to which you're entitled. See [Supported platforms]({% link content-services/latest/support/index.md %}) for more details on the associated versions.
+* You must upgrade to a supported version of Alfresco Search Services before upgrading the repository to 23.x. See [Upgrade Search Services]({% link search-services/latest/upgrade/index.md %}) for more information.
 
-> **Note:** If you're upgrading from an earlier release that's not shown on this diagram, contact [Alfresco Support](https://support.alfresco.com/){:target="_blank"}.
+> **Note:** If you're upgrading from an earlier release that's not shown on this diagram, [contact Support]({% link support/latest/contact.md %}){:target="_blank"}.
 
 ## Upgrade from Alfresco Community Edition
 
@@ -47,6 +46,9 @@ The following table shows the upgrade path for major versions:
 | Community Edition 7.1 | Content Services 7.1 |
 | Community Edition 7.2 | Content Services 7.2 |
 | Community Edition 7.3 | Content Services 7.3 |
+| Community Edition 7.4 | Content Services 7.4 |
+| Community Edition 23.1 | Content Services 23.1 |
+| Community Edition 23.2 | Content Services 23.2 |
 
 Please contact Alfresco Support for upgrade advice that's specific to your environment.
 
@@ -73,6 +75,8 @@ These steps assume that you've got an existing Content Services installation (`a
 
     2. [Back up your existing repository]({% link content-services/latest/admin/backup-restore.md %}) (`alfresco-v.1`) and the database.
 
+        > **Note:** Backup of the repository can be skipped if using an alternative mechanism to guarantee restoration of the repository to its pre-upgrade state. For example, AWS S3 storage allows for restoration to a fixed point in time as long as soft deletes are enabled. For more information, see [Enabling versioning on buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/manage-versioning-examples.html){:target="_blank"}.
+
         > **Note:** Back up any configuration overrides from the `<extension>` directory.
 
     3. Install the new version (`alfresco-v.2`) into a different directory from the existing installation.
@@ -92,13 +96,13 @@ These steps assume that you've got an existing Content Services installation (`a
         data.dir.root:/alfresco-v.2/solr/myindexes
         ```
 
-2. Validate the new 7.3 installation to check that it's working correctly.
+2. Validate the new 23.x installation to check that it's working correctly.
 
     1. Configure the new installation with a new repository and database (not the existing one).
 
     2. [Start the server]({% link content-services/latest/install/zip/additions.md %}#start-server) and [validate](#validate-upgrade) that the system works correctly.
 
-3. Apply all customizations to the new 7.3 installation.
+3. Apply all customizations to the new 23.x installation.
 
     1. [Stop]({% link content-services/latest/install/zip/additions.md %}#stop-server) the server.
 
@@ -136,7 +140,7 @@ These steps assume that you've got an existing Content Services installation (`a
 
     If upgrading to the latest version from 5.2, then the existing multi-tenancy (MT) extension files are no longer 
     relevant and must not be migrated to the new version. It's recommended that you backup your existing MT files.
-   
+
 7. (Optional) Perform this step if you're working in a clustered environment:
 
     1. Shut down all nodes in the cluster.

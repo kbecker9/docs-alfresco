@@ -4,12 +4,12 @@ title: Install using the distribution ZIP
 
 Governance Services is installed by applying two AMP files to an existing Alfresco Community Edition installation.
 
-Download the Alfresco Governance Services distribution from [Alfresco Nexus repository](https://nexus.alfresco.com/nexus/#nexus-search;gav~org.alfresco~alfresco-governance*~7.3.0~~){:target="_blank"}.
+You can download the Alfresco Governance Services distribution from [Alfresco Nexus repository](https://nexus.alfresco.com/nexus/){:target="_blank"}. Search for "alfresco-governance-services-community" and pick the version that closest matches your installation.
 
 The Governance Services Community Edition distribution zip contains the following files:
 
-|alfresco-governance-services-community-repo-17.183.amp|Contains Governance Services functionality that's applied to an existing Alfresco Community Edition installation.|
-|alfresco-governance-services-community-share-17.138.amp|Contains Governance Services functionality that's applied to an existing Alfresco Share installation.|
+|alfresco-governance-services-community-repo-23.2.x.xxx.amp|Contains Governance Services functionality that's applied to an existing Alfresco Community Edition installation.|
+|alfresco-governance-services-community-share-23.2.x.xxx.amp|Contains Governance Services functionality that's applied to an existing Alfresco Share installation.|
 
 > **Note:** Install the AMPs manually using the Module Management Tool (MMT), rather than using the `apply_amps` tool.
 
@@ -23,20 +23,22 @@ The Governance Services Community Edition distribution zip contains the followin
 
 3. Copy the AMP files to the Alfresco `amps` and `amps_share` directories.
 
-    * Copy the `alfresco-governance-services-community-repo-17.183.amp` file to the Alfresco `amps` directory.
-    * Copy the `alfresco-governance-services-community-share-17.138.amp` file to the Alfresco `amps_share` directory.
+    * Copy the `alfresco-governance-services-community-repo-23.2.x.xxx.amp` file to the Alfresco `amps` directory.
+    * Copy the `alfresco-governance-services-community-share-23.2.x.xxx.amp` file to the Alfresco `amps_share` directory.
 
 4. Change into the root of the Alfresco Community Edition installation directory. Directories specified in the following procedures are relative to this directory.
 
 5. Run the following commands to install the AMP files:
 
     ```bash
-    java -jar bin\alfresco-mmt.jar install amps\alfresco-governance-services-community-repo-17.183.amp tomcat\webapps\alfresco.war
+    java -jar bin\alfresco-mmt.jar install amps\alfresco-governance-services-community-repo-23.2.x.xxx.amp tomcat\webapps\alfresco.war
     ```
 
     ```bash
-    java -jar bin\alfresco-mmt.jar install amps_share\alfresco-governance-services-community-share-17.138.amp tomcat\webapps\share.war
+    java -jar bin\alfresco-mmt.jar install amps_share\alfresco-governance-services-community-share-23.2.x.xxx.amp tomcat\webapps\share.war
     ```
+
+    Replace `x.xxx` with the exact versions provided in the Governance Services Community Edition distribution zip.
 
 6. Start the Alfresco Community Edition server.
 

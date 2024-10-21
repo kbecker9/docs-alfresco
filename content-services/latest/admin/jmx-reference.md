@@ -18,14 +18,14 @@ The following is summary of the `alfresco-global.properties` that can be viewed 
 |authentication.chain|Specifies the authentication chain.|
 |synchronization.autoCreatePeopleOnLogin|Specifies whether to create a user with default properties when a user is successfully authenticated, who does not yet exist in Content Services, and was not returned by a differential sync (if enabled with the specified property). The default is `true`. Setting this to `false` allows you to restrict Content Services to a subset of those users who could be authenticated by LDAP; only those created by synchronization are allowed to log in. You can control the set of users in this more restricted set by overriding the user query properties of the LDAP authentication subsystem|
 |synchronization.import.cron|Specifies a cron expression defining when the scheduled synchronization job should run, by default at midnight every day.|
-|synchronization.loggingInterval|Specifies the number of user or group entries the synchronization subsystem will process before logging progress at INFO level. If you have the following default entry in `log4j.properties`:<br><br>`log4j.logger.org.alfresco.repo.security.sync=info`. The default is `100`.|
+|synchronization.loggingInterval|Specifies the number of user or group entries the synchronization subsystem will process before logging progress at INFO level. If you have the following default entry in `log4j2.properties`:<br><br>`logger.alfresco-repo-security-sync.name=org.alfresco.repo.security.sync`<br>`logger.alfresco-repo-security-sync.level=info`<br>The default is `100`.|
 |synchronization.syncOnStartup|Specifies whether to trigger a differential sync when the subsystem starts up. The default is `true`. This ensures that when user registries are first configured, the bulk of the synchronization work is done on server startup, rather than on the first login.|
 |synchronization.syncWhenMissingPeopleLogIn|Specifies whether to trigger a differential sync when a user is successfully authenticated who does not yet exist in Content Services. The default is `true`.|
 |synchronization.synchronizeChangesOnly|Specifies if the scheduled synchronization job is run in differential mode. The default is `false`, which means that the scheduled sync job is run in full mode. Regardless of this setting a differential sync can still be triggered when a user is successfully authenticated who does not yet exist in Content Services.|
 |synchronization.workerThreads|Specifies the number of worker threads. For example, `2`.|
 |filesystem.acl.global.defaultAccessLevel|Specifies the default access level. Directly names the access control level (None, Read or Write) that applies to requests that are not in scope of any other access control. Note that it's not valid to use the value None without defining other access controls.|
 |filesystem.acl.global.domainAccessControls|Specifies the set of access controls with domain scope. This is a composite property whose value should be a comma-separated list of domain names. To define the access level for one of the listed domains, use the property `filesystem.acl.global.domainAccessControls.value.<domain>.accessType`.<br><br>The example below defines Read level access for `DOMAIN1` and Write level access for `DOMAIN2`.<br<br>`filesystem.acl.global.domainAccessControls=DOMAIN1,DOMAIN2`<br><br>`filesystem.acl.global.domainAccessControls.value.DOMAIN1.accessType=Read`<br><br>`filesystem.acl.global.domainAccessControls.value.DOMAIN2.accessType=Write`|
-|filesystem.acl.global.protocolAccessControls|Specifies the set of access controls with protocol scope. This is a composite property whose value should be a comma-separated list of access control names.<br><br>To define the access level for a named access control and the set of protocols to which it applies, use the properties:<br><br>`filesystem.acl.global.protocolAccessControls.value.<Name>.accessType<br>`<br><br>`filesystem.acl.global.protocolAccessControls.value.<Name>.checkList`<br><br>Protocols can include SMB, CIFS, NFS, and FTP.<br><br>The example below defines Read level access for NFS and Write level access for CIFS and FTP.<br><br>`filesystem.acl.global.protocolAccessControls=nfs,cifs,ftp`<br><br>`filesystem.acl.global.protocolAccessControls.value.nfs.accessType=Read`<br><br>`filesystem.acl.global.protocolAccessControls.value.nfs.checkList=NFS`<br><br>`filesystem.acl.global.protocolAccessControls.value.others.accessType=Write`<br><br>`filesystem.acl.global.protocolAccessControls.value.others.checkList=CIFS`<br><br>`filesystem.acl.global.protocolAccessControls.value.others.accessType=Write`<br><br>`filesystem.acl.global.protocolAccessControls.value.others.checkList=FTP`|
+|filesystem.acl.global.protocolAccessControls|Specifies the set of access controls with protocol scope. This is a composite property whose value should be a comma-separated list of access control names.<br><br>To define the access level for a named access control and the set of protocols to which it applies, use the properties:<br><br>`filesystem.acl.global.protocolAccessControls.value.<Name>.accessType<br>`<br><br>`filesystem.acl.global.protocolAccessControls.value.<Name>.checkList`<br><br>Protocols can include NFS and FTP.<br><br>The example below defines Read level access for NFS and Write level access for FTP.<br><br>`filesystem.acl.global.protocolAccessControls=nfs,ftp`<br><br>`filesystem.acl.global.protocolAccessControls.value.nfs.accessType=Read`<br><br>`filesystem.acl.global.protocolAccessControls.value.nfs.checkList=NFS`<br><br>`filesystem.acl.global.protocolAccessControls.value.others.accessType=Write`<br><br>`filesystem.acl.global.protocolAccessControls.value.others.checkList=FTP`|
 |filesystem.acl.global.userAccessControls|Specifies the set of access controls with user scope. This is a composite property whose value should be a comma-separated list of user names.<br><br>To define the access level for one of the listed users, use the property `filesystem.acl.global.userAccessControls.value.<user>.accessType`.<br><br>The example below defines Read level access for user1 and Write level access for user2.<br><br>`filesystem.acl.global.userAccessControls=user1,user2`<br><br>`filesystem.acl.global.userAccessControls.value.user1.accessType=Read`<br><br>`filesystem.acl.global.userAccessControls.value.user2.accessType=Write`|
 |ftp.enabled|Enables or disables the FTP server.|
 |ftp.ipv6.enabled|Enables or disables the IPv6 FTP server.|
@@ -305,10 +305,13 @@ Exposes the default configuration settings that are present in the alfresco-glob
 |alfresco.cluster.hostname|`${localname}`|
 |alfresco.cluster.interface|blank|
 |alfresco.cluster.max.init.retries|`50`|
-|alfresco.cluster.nodetype|`"Repository server"`|
+|alfresco.cluster.name|blank|
+|alfresco.cluster.nodetype|`Repository server`|
 |alfresco.clusterCheck.timeout|`4000`|
 |alfresco.context|`alfresco`|
 |alfresco.hazelcast.autoinc.port|`false`|
+|alfresco.hazelcast.client.address|`127.0.0.1:5701`|
+|alfresco.hazelcast.client.configLocation|`classpath:alfresco/hazelcast/hazelcast-client.xml`|
 |alfresco.hazelcast.configLocation|`classpath:alfresco/hazelcast/hazelcast-tcp.xml`|
 |alfresco.hazelcast.ec2.accesskey|`my-access-key`|
 |alfresco.hazelcast.ec2.region|`us-east-1`|
@@ -316,6 +319,7 @@ Exposes the default configuration settings that are present in the alfresco-glob
 |alfresco.hazelcast.ec2.securitygroup|blank|
 |alfresco.hazelcast.ec2.tagkey|`type`|
 |alfresco.hazelcast.ec2.tagvalue|`hz-nodes`|
+|alfresco.hazelcast.embedded|`true`|
 |alfresco.hazelcast.mancenter.enabled|`false`|
 |alfresco.hazelcast.mancenter.url|`http://localhost:8080/mancenter`|
 |alfresco.hazelcast.port|`5701`|
@@ -1177,15 +1181,17 @@ Exposes the parameters of the Content Services license.
 
 See the Repo Admin Console **General > License** for information about these attributes: `http://<hostname>:<portnumber>/alfresco/service/enterprise/admin/admin-license`
 
-### Alfresco:Name=Log4jHierarchy
+### Alfresco:Name=Log4jManagement
 
-Object Type = `org.apache.log4j.jmx.HierarchyDynamicMBean*`
+Object Type = `org.alfresco.enterprise.repo.management.Log4jManagement`
 
-`Log4jHierarchy` is an instance of the `HierarchyDynamicMBean` class provided with log4j that allows adjustments to be made to the level of detail included in the server logs.
+`Log4jManagement` is an instance of the `Log4jManagement` class that allows the creation of new loggers at runtime.
 
-All read only attributes are prefixed with `logger=org.alfresco.` and the default value is the same as the attribute name, for example, `logger=org.alfresco.cmis` is the name and default value of the CMIS logger.
+Exposes the name of the current `LoggerContext`:
 
-The editable `threshold` attribute is discussed in [JMX editable management beans](#editablembeans).
+| Attribute name | Example value |
+| -------------- | ------------- |
+| LogContextName | `2cc5982e` |
 
 ### Alfresco:Name=MetadataQueryIndexesCheck
 
@@ -1583,23 +1589,15 @@ Object Type = `com.sun.proxy$Proxy108`
 
 This MBean allows management and monitoring of the FTP servers configured. See the Repo Admin Console **Virtual File Systems - File Servers** for information about these editable attributes: `http://<hostname>:<portnumber>/alfresco/service/enterprise/admin/admin-fileservers`.
 
-### Alfresco:Name=Log4jHierarchy (editable)
+### Alfresco:Name=Log4jManagement (editable)
 
-Object Type = `org.apache.log4j.jmx.HierarchyDynamicMBean`
+Object Type = `org.alfresco.enterprise.repo.management.Log4jManagement`
 
-This MBean is an instance of the `HierarchyDynamicMBean` class provided with log4j that allows adjustments to be made to the level of detail included in the server logs. Not all attributes for `Alfresco:Name=Log4jHierarchy` are editable; only those that are editable are shown in this table.
+This MBean is an instance of the `Log4jManagement` class that allows the creation of new loggers at runtime. It does not provide any editable attributes.
 
-| Attribute name | Example value |
-| -------------- | ------------- |
-| threshold | `ALL` |
+You can add a new logger by selecting the **Operations > addLoggerMBean** operation in JConsole and specifying the class name for the new logger MBean. A new MBean will be registered under the `org.apache.logging.log4j2:type=<LogContextName>,component=Loggers` component, allowing management of that logger.
 
-Threshold is a special attribute that controls the server-wide logging threshold. It is not cluster aware. Its value must be the name of one of the log4j logging levels.
-
-> **CAUTION:** Any messages logged with a priority lower than this threshold will be filtered from the logs. The default value is ALL, which means no messages are filtered, and the highest level of filtering is OFF which turns off logging altogether (not recommended).
-
-You can add a new logger to `Log4jHierarchy` by selecting the **Operations > addLoggerMBean** operation in JConsole and specify the string and priority for the new logger MBean. The bean will be given an additional read-only property for that logger and a new MBean will be registered in the `#log4j:logger=*` tree, allowing management of that logger.
-
-It is not normally necessary to use this operation, because the server pre-registers all loggers initialized during startup. However, if the logger you're interested in was not initialized at this point, you'll have to add a logger. Add the fully qualified name of the logger as an argument and if successful, the object name of the newly registered MBean for managing that logger is returned. The logger is then displayed in the attribute list of log4j loggers.
+It is not normally necessary to use this operation, because the server pre-registers all loggers initialized during startup. However, if the logger you’re interested in was not initialized at this point, you’ll have to add a logger, specifying the fully qualified name of the logger as an argument.
 
 For example, if in Java class `org.alfresco.repo.admin.patch.PatchExecuter` the logger is initialized as follows:
 
@@ -1633,16 +1631,17 @@ Exposes information about the workflow management interface for Activiti definit
 
 See the Repo Admin Console **Repository Services - Process Engines** for information about these editable attributes: `http://<hostname>:<portnumber>/alfresco/service/enterprise/admin/admin-processengines`.
 
-**log4j:logger=***
+**org.apache.logging.log4j2:type=<LogContextName>,component=Loggers**
 
-An instance of the `LoggerDynamicMBean` class provided with log4j that allows adjustments to be made to the level of detail included in the logs from an individual logger.
+This component contains a dynamic list of instances of the `LoggerConfigAdminMBean` class provided with log4j that allows adjustments to be made to the level of detail included in the logs from an individual logger. Note that the LogContextName value is not fixed.
 
-Not all attributes for `log4j:logger=*` are editable; only those that are editable are shown in this table.
+Not all attributes for `LoggerConfigAdminMBean` are editable; only those that are editable are shown in this table.
 
 | Attribute name | Example value |
 | -------------- | ------------- |
-| priority | `WARN`|
+| Level | `WARN`|
+| Additive | `true`|
 
-Priority is a special attribute that specifies the minimum log4j logging level of messages from this logger to include in the logs. For example, a value of ERROR would mean that messages logged at lower levels such as WARN and INFO would not be included.
+Level is a special attribute that specifies the minimum log4j logging level of messages from this logger to include in the logs. For example, a value of ERROR would mean that messages logged at lower levels such as WARN and INFO would not be included.
 
-You can change the priority of any log4j attribute by selecting the required MBean and **Attributes > priority**. The new value does not prevail after a shutdown. For a list of possible priority values, see [Log4j priority settings](http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Priority.html){:target="_blank"}.
+You can change the level of any logger by selecting the required MBean and editing **Attributes > Level**. The new value does not prevail after a shutdown. For a list of possible priority values, see [Log4j levels](https://logging.apache.org/log4j/2.x/log4j-api/apidocs/org/apache/logging/log4j/Level.html){:target="_blank"}.

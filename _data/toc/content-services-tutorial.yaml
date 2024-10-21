@@ -1,5 +1,5 @@
-# Alfresco Content Services Tutorials 7.3
-- version: 7.3
+# Alfresco Content Services Tutorials 23.2
+- version: 23.2
   pages:
     - title: 'Tutorials'
       pages:
@@ -9,6 +9,16 @@
           path: '/content-services/latest/tutorial/model/'
         - title: 'Configure Smart Folders'
           path: '/content-services/latest/tutorial/smart/'
+        - title: 'Configure Keycloak'
+          pages:
+            - title: 'Single Sign On Guide'
+              path: '/content-services/latest/tutorial/sso/'
+            - title: 'SAML'
+              path: '/content-services/latest/tutorial/sso/saml/'
+            - title: 'LDAP'
+              path: '/content-services/latest/tutorial/sso/ldap/'
+            - title: 'Kerberos'
+              path: '/content-services/latest/tutorial/sso/kerberos/'
         - title: 'Videos'
           pages:
             - title: 'Alfresco Share videos'
@@ -54,6 +64,122 @@
         - title: 'Overview'
           path: '/content-services/community/tutorial/'
 
+# Alfresco Content Services Tutorials 7.4
+- version: 7.4
+  pages:
+    - title: 'Tutorials'
+      pages:
+        - title: 'Overview'
+          path: '/content-services/7.4/tutorial/'
+        - title: 'Configure Model Manager'
+          path: '/content-services/7.4/tutorial/model/'
+        - title: 'Configure Smart Folders'
+          path: '/content-services/7.4/tutorial/smart/'
+        - title: 'Configure Keycloak'
+          pages:
+            - title: 'Single Sign On Guide'
+              path: '/content-services/7.4/tutorial/sso/'
+            - title: 'SAML'
+              path: '/content-services/7.4/tutorial/sso/saml/'
+            - title: 'LDAP'
+              path: '/content-services/7.4/tutorial/sso/ldap/'
+            - title: 'Kerberos'
+              path: '/content-services/7.4/tutorial/sso/kerberos/'
+        - title: 'Videos'
+          pages:
+            - title: 'Alfresco Share videos'
+              path: '/content-services/7.4/tutorial/video/'
+            - title: 'Content management videos'
+              path: '/content-services/7.4/tutorial/video/content/'
+            - title: 'Site management videos'
+              path: '/content-services/7.4/tutorial/video/sites/'
+            - title: 'Model Manager videos'
+              path: '/content-services/7.4/tutorial/video/model/'
+        - title: 'Develop platform extensions'
+          pages:
+          - title: 'Create a platform extension project'
+            path: '/content-services/7.4/tutorial/platform/'
+          - title: 'Create a content model'
+            path: '/content-services/7.4/tutorial/platform/content-model/'
+          - title: 'Create Web Scripts'
+            path: '/content-services/7.4/tutorial/platform/web-scripts/'
+        - title: 'Develop Share extensions'
+          pages:
+          - title: 'Create a Share extension project'
+            path: '/content-services/7.4/tutorial/share/'
+          - title: 'Change the Share header'
+            path: '/content-services/7.4/tutorial/share/header/'
+          - title: 'Create and change pages'
+            path: '/content-services/7.4/tutorial/share/pages/'
+          - title: 'Create DocLib actions and metadata templates'
+            path: '/content-services/7.4/tutorial/share/doclib/'
+          - title: 'Conditional rendering (evaluators)'
+            path: '/content-services/7.4/tutorial/share/rendering/'
+          - title: 'Style Share'
+            path: '/content-services/7.4/tutorial/share/style/'
+          - title: 'Add AMD packages (Aikau)'
+            path: '/content-services/7.4/tutorial/share/amd/'
+          - title: 'Client debug mode'
+            path: '/content-services/7.4/tutorial/share/debug/'
+
+# Alfresco Content Services Tutorials 7.3
+- version: 7.3
+  pages:
+    - title: 'Tutorials'
+      pages:
+        - title: 'Overview'
+          path: '/content-services/7.3/tutorial/'
+        - title: 'Configure Model Manager'
+          path: '/content-services/7.3/tutorial/model/'
+        - title: 'Configure Smart Folders'
+          path: '/content-services/7.3/tutorial/smart/'
+        - title: 'Configure Keycloak'
+          pages:
+            - title: 'Single Sign On Guide'
+              path: '/content-services/7.3/tutorial/sso/'
+            - title: 'SAML'
+              path: '/content-services/7.3/tutorial/sso/saml/'
+            - title: 'LDAP'
+              path: '/content-services/7.3/tutorial/sso/ldap/'
+            - title: 'Kerberos'
+              path: '/content-services/7.3/tutorial/sso/kerberos/'
+        - title: 'Videos'
+          pages:
+            - title: 'Alfresco Share videos'
+              path: '/content-services/7.3/tutorial/video/'
+            - title: 'Content management videos'
+              path: '/content-services/7.3/tutorial/video/content/'
+            - title: 'Site management videos'
+              path: '/content-services/7.3/tutorial/video/sites/'
+            - title: 'Model Manager videos'
+              path: '/content-services/7.3/tutorial/video/model/'
+        - title: 'Develop platform extensions'
+          pages:
+            - title: 'Create a platform extension project'
+              path: '/content-services/7.3/tutorial/platform/'
+            - title: 'Create a content model'
+              path: '/content-services/7.3/tutorial/platform/content-model/'
+            - title: 'Create Web Scripts'
+              path: '/content-services/7.3/tutorial/platform/web-scripts/'
+        - title: 'Develop Share extensions'
+          pages:
+            - title: 'Create a Share extension project'
+              path: '/content-services/7.3/tutorial/share/'
+            - title: 'Change the Share header'
+              path: '/content-services/7.3/tutorial/share/header/'
+            - title: 'Create and change pages'
+              path: '/content-services/7.3/tutorial/share/pages/'
+            - title: 'Create DocLib actions and metadata templates'
+              path: '/content-services/7.3/tutorial/share/doclib/'
+            - title: 'Conditional rendering (evaluators)'
+              path: '/content-services/7.3/tutorial/share/rendering/'
+            - title: 'Style Share'
+              path: '/content-services/7.3/tutorial/share/style/'
+            - title: 'Add AMD packages (Aikau)'
+              path: '/content-services/7.3/tutorial/share/amd/'
+            - title: 'Client debug mode'
+              path: '/content-services/7.3/tutorial/share/debug/'
+
 # Alfresco Content Services Tutorials 7.2
 - version: 7.2
   pages:
@@ -65,6 +191,16 @@
           path: '/content-services/7.2/tutorial/model/'
         - title: 'Configure Smart Folders'
           path: '/content-services/7.2/tutorial/smart/'
+        - title: 'Configure Keycloak'
+          pages:
+            - title: 'Single Sign On Guide'
+              path: '/content-services/7.2/tutorial/sso/'
+            - title: 'SAML'
+              path: '/content-services/7.2/tutorial/sso/saml/'
+            - title: 'LDAP'
+              path: '/content-services/7.2/tutorial/sso/ldap/'   
+            - title: 'Kerberos'
+              path: '/content-services/7.2/tutorial/sso/kerberos/'
         - title: 'Videos'
           pages:
             - title: 'Alfresco Share videos'

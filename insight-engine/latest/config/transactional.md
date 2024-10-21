@@ -103,7 +103,7 @@ For multi-valued properties, CMIS QL supports `ANY` semantics from SQL 92. A que
 
 ### Alfresco FTS QL & TMDQ
 
-It is more difficult to write AFTS queries that use TMDQ as the default behaviour is to use full text queries for text. These cannot go against the database. Also, special fields like `SITE` and `TAG` that are derived from the structure will not go to the database. `TYPE`, `ASPECT` and the related exact matches work fine with TMDQ. All property data types are fine but strings should be less than 1024 characters in length. Text queries have to be prefixed with `=` to avoid full text search. Additionally, `PARENT` is supported but `OR` is supported from Alfresco One 5.1 onwards.
+It is more difficult to write AFTS queries that use TMDQ as the default behaviour is to use full text queries for text. These cannot go against the database. Also, special fields like `SITE` and `TAG` that are derived from the structure will not go to the database. `TYPE`, `ASPECT` and the related exact matches work fine with TMDQ. All property data types are fine but strings should be less than 1024 characters in length. Text queries have to be prefixed with `=` to avoid full text search. Additionally, there is partial support for `PARENT` queries, but database queries will be missing any categories since there is no notion of category paths in the database.
 
 Ranges, PATH, and ANCESTOR are not currently supported.
 
@@ -154,11 +154,11 @@ The following AFTS exact matches and patterns are supported:
 
 ### Supported for special fields in TMDQ using AFTS
 
-* PARENT
 * TYPE
 * ASPECT
 * EXACTTYPE
 * EXACTASPECT
+* PARENT - Note that database queries will not contain any categories since there is no notion of category paths in the database
 
 > **Note:** CMIS QL does not support any use of CONTAINS() using the database.
 
@@ -354,6 +354,21 @@ You can limit both the time spent and the number of documents checked before Alf
     For example, `system.acl.maxPermissionChecks=2000`.
 
     > **Note:** If you increase these values and have a query that returns a very large number of results, (a) the search results will take longer to be returned to the user, and (b) the system will spend longer to check permissions, leading to the possibility of performance degradation. If you set these values to a low number, you run the risk of inconsistent search results every time you run the same search. These settings are also applied when paging. So paging the results will only go up to the maximum returned results based on these settings.
+
+From Content Services 7.x you can set these limits on a per query basis which overrides the values set in the `alfresco.global.properties` file.
+To do this in the REST API you must add a limits element value to the request JSON:
+
+```sql
+"limits": {
+  "permissionEvaluationTime": 20000,
+  "permissionEvaluationCount": 2000
+}
+```
+
+In the Java API the `SearchParameters` object has the following methods:
+
+* `setMaxPermissionChecks(int)`
+* `setMaxPermissionCheckTimeMillis(long)`
 
 ## Controlling search results
 

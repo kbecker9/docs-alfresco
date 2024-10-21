@@ -16,6 +16,8 @@ When FTS is embedded in CMIS-SQL, only the CMIS-SQL-style property identifiers (
 
 When FTS is used standalone, fields can also be identified using `prefix:local-name` and `{uri}local-name` styles.
 
+## Query time boosts
+
 Query time boosts allow matches on certain parts of the query to influence the score more than others.
 
 All query elements can be boosted: terms, phrases, exact terms, expanded terms, proximity (only in filed groups), ranges, and groups.
@@ -119,13 +121,20 @@ If you don’t specify a field the search runs against name, description, title,
 
 > **Note:** If cross locale is not configured for the field then an exception occurs.
 
-The list of the default supported types as declared in the `<alfresco_home>/solr4/conf/shared.properties` file:
+The list of default supported Alfresco properties is declared in the `<search_services_home>/solrhome/conf/shared.properties` file:
 
-`alfresco.cross.locale.datatype.0={http://www.alfresco.org/model/dictionary/1.0}text`
+```text
+alfresco.cross.locale.property.0={http://www.alfresco.org/model/content/1.0}name
+alfresco.cross.locale.property.1={http://www.alfresco.org/model/content/1.0}lockOwner
+```
 
-`alfresco.cross.locale.datatype.1={http://www.alfresco.org/model/dictionary/1.0}content`
+You can extend that capability by uncommenting the lines below and performing a full reindex. This has the result of enabling cross locale on all properties defined with those property types:
 
-`alfresco.cross.locale.datatype.2={http://www.alfresco.org/model/dictionary/1.0}mltext`
+```text
+alfresco.cross.locale.datatype.0={http://www.alfresco.org/model/dictionary/1.0}text
+alfresco.cross.locale.datatype.1={http://www.alfresco.org/model/dictionary/1.0}content
+alfresco.cross.locale.datatype.2={http://www.alfresco.org/model/dictionary/1.0}mltext
+```
 
 ## Search in fields
 
@@ -277,16 +286,21 @@ You can narrow your search results by excluding words with the `NOT` syntax.
 
 Single terms, phrases, and so on can be combined using "`NOT`" in upper, lower, or mixed case, or prefixed with "`!`" or "`-`".
 
-These queries search for nodes that contain the terms `yellow` in any content.
+These queries search for nodes that contain the term "yellow" but do not contain the term "banana" in the content.
 
 ```sql
-yellow NOT banana
-yellow !banana
-yellow -banana
+yellow AND NOT banana
+yellow AND !banana
+yellow AND -banana
+```
+These queries search for nodes that contain the term "banana" but do not contain the term "yellow" in the content.
+
+```sql
 NOT yellow banana
 -yellow banana
 !yellow banana
 ```
+The `AND` operator can be omitted for Share. 
 
 The `NOT` operator can only be used for string keywords; it doesn't work for numerals or dates.
 
@@ -522,7 +536,7 @@ banana
 TEXT:banana
 ```
 
-Both of these queries will find any nodes with the word "banana" in any property of type `d:content`.
+Both of these queries will find any nodes with the word "banana" in any property of type `d:content`, `d:text` or `d:mltext`.
 
 If the appropriate data dictionary definition(s) for the field supports both FTS and untokenized search, then FTS search will be used. FTS will include synonyms if the analyzer generates them. Terms cannot contain whitespace.
 

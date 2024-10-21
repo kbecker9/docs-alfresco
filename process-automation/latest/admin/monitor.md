@@ -46,13 +46,13 @@ The columns for each application are:
 | Description | A description of the application, if entered when the application was released. |
 | Version | The version of the application. |
 | Release | The amount of times the application has been released. |
-| Digital Workspace | If the application is the Digital Workspace, there is a link to it. |
+| Workspace | If the application is the Workspace, there is a link to it. |
 | Three dots | Right click on the three dots to access the [Process Instances](#process-instances), [User Tasks](#user-tasks), [Service Tasks](#service-tasks), [Audit](#audit), or [Data Cleanup](#data-cleanup) sections. |
 | Star icon | Use the icon to select which application you want to 'favorite'. The application you select will appear first in the search lists, when using the search in the **Process Instances**, **User Tasks**, and **Service Tasks** sections. |
 
 ## Process Instances
 
-The **Process Instances** section is for monitoring all active, completed, and suspended process instances that are running in each application.
+The **Process Instances** section is for monitoring all active, completed, and suspended process instances that are running in each application. Use the filters to find process instances. To automatically populate the [Service Tasks](#service-tasks) section with all the service tasks of a process instance, click the three dots next to a process instance and select **Service Tasks**.
 
 ### Properties {#process-properties}
 
@@ -135,7 +135,7 @@ Cancelling a process instance will change the status to `CANCELLED`.
 
 Use the **Delete** option to delete a process instance. When you delete a process instance you will permanently delete it and all of its data and the operation cannot be undone. You can delete one or more selected process instances, regardless of what state they are in. You can delete more than one at the same time by using the **Select multiple** check box on the top right. Once you have selected multiple process instances, click **Delete** from the top right.
 
-## User tasks
+## User Tasks
 
 The **User Tasks** section is for monitoring all active, assigned, completed, and suspended tasks that are running in each application.
 
@@ -204,9 +204,9 @@ Use the **Sibling Tasks** option to view any other standalone tasks that share t
 
 Use the **Audit** option to view all audit logs for the selected task. This will open the [audit](#audit) section with the filter restricted to the application and the `Event ID` of the selected user task.
 
-## Service tasks
+## Service Tasks
 
-The **Service Tasks** section is for monitoring all [service tasks]({% link process-automation/latest/model/processes/bpmn.md %}#service-task) that are running in each application.
+The **Service Tasks** section is for monitoring all [service tasks]({% link process-automation/latest/model/processes/bpmn.md %}#service-task) that are running in each application. You can enter a **ProcessInstanceID** in the filter to view all the service tasks of a specific process instance. See [Process Instances](#process-instances) for how to automatically populate the **Service Tasks** section with the service tasks of a particular process instance.
 
 > **Note:** This includes [connectors]({% link process-automation/latest/model/connectors/index.md %}), [decision tables]({% link process-automation/latest/model/decisions.md %}) and [scripts]({% link process-automation/latest/model/scripts.md %}).
 

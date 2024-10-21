@@ -90,3 +90,132 @@ transformer.timeout.excel = ${transformer.timeout.default}
 transformer.timeout.powerpoint = ${transformer.timeout.default}
 ```
 -->
+
+## Configure DTE with SSL
+
+Below is a very basic example of how to configure Secure Sockets Layer (SSL) for DTE. It forms a good starting point for customers with experience and competencies in DevOps.
+
+1. Edit `C:\Program Files (x86)\TransformationServer\tomcat\conf\server.xml`:
+
+    For example:
+
+    1. Comment out this connector:
+
+        ```xml
+        <Connector executor="tomcatThreadPool"
+                port="${https.port}" protocol="org.apache.coyote.http11.Http11NioProtocol"
+                SSLEnabled="true">
+            <SSLHostConfig>
+                <Certificate certificateKeystoreFile="conf/.keystore" certificateKeystorePassword="tomcat" type="RSA" />
+            </SSLHostConfig>
+        </Connector>
+        ```
+
+    2. Uncomment this Connector:
+
+        ```xml
+        <Connector executor="tomcatThreadPool"
+            port="${https.port}" protocol="org.apache.coyote.http11.Http11NioProtocol"
+            SSLEnabled="true" scheme="https" secure="true"
+            clientAuth="false" sslProtocol="TLS"
+            keystoreFile="PATH_TO_KEYSTORE" keystorePass="KEYSTORE_PASSWORD" />
+        ```
+
+2. Check the REST configuration URL under: `https://<dte-hostname>:8443/transformation-server/#/settings`:
+
+    This should be set to: `https://<dte-hostname>:8443`.
+
+3. Edit `alfresco-global.properties`:
+
+    Change `localTransform.transform-dte.url=http://<dte-hostname>:8080/transform-dte`
+
+    to `localTransform.transform-dte.url=https://<dte-hostname>:8443/transform-dte`
+
+For more information on configuring SSL on Tomcat, see the Tomcat documentation [SSL/TLS Configuration How-To](https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html){:target="_blank"}.
+
+## Configure HTML sanitizer
+
+Starting from DTE 2.4.2, DTE brings new configuration options to control the behavior for HTML sanitizing when converting HTML files.
+
+There are multiple modes you can choose from:
+
+| Mode | Description |
+| ---- | ----------- |
+| Blacklist | This is the default setting. You can choose which HTML parts and attributes are not allowed. Ths setting is empty by default, but it stops Server-Side Request Forgery (SSRF) attacks. |
+| Whitelist | You can choose which HTML parts and attributes are allowed. This setting is empty by default, but it stops SSRF attacks. |
+| None | `None` means there is no sanitization provided at all. SSRF attacks are possible when using this mode, as it re-enables features like embedded script execution or iframe preview. <br><br>**Note:** This mode is not recommended. Administrators - use this setting at your own risk. |
+
+### Default configuration
+
+The default configuration provided in `C:\Program Files (x86)\TransformationServer\tomcat\webapps\transformation-backend\WEB-INF\classes\default-configuration.properties` is shown below:
+
+```text
+# Configuration for HTML sanitizer
+# Sample configuration for HTML sanitizer
+# Modes are WHITELIST, BLACKLIST, NONE (Use at own risk, not recommended)
+sanitizer.mode=BLACKLIST
+# Only works with BLACKLIST mode. Sample: sanitizer.disallowed.elements=a,script,iframe,style
+sanitizer.disallowed.elements=
+# Only works with BLACKLIST mode. Sample: sanitizer.disallowed.attributes=a.onclick,a.onmouseover,img.onerror,button.onclick (element.attribute)
+sanitizer.disallowed.attributes=
+# Only works with WHITELIST mode. Sample: sanitizer.allowed.elements=p,div,span,ul,ol,li,h1,h2,h3,a
+sanitizer.allowed.elements=
+# Only works with WHITELIST mode. Sample: sanitizer.allowed.attributes=a.href,a.target,img.src,img.alt,div.class (element.attribute)
+sanitizer.allowed.attributes=
+```
+
+You can override the default configuration in `C:\Program Files (x86)\TransformationServer\tomcat\webapps\transformation-backend\WEB-INF\classes\custom-configuration.properties`.
+
+### Examples
+
+Below are some examples of how to configure the new HTML sanitizer which comes with DTE 2.4.2.
+
+Configuration for `BLACKLIST` mode:
+
+```text
+# Configuration for HTML sanitizer
+# Sample configuration for HTML sanitizer
+# Modes are WHITELIST, BLACKLIST, NONE (Use at own risk, not recommended)
+sanitizer.mode=BLACKLIST
+# Only works with BLACKLIST mode. Sample: sanitizer.disallowed.elements=a,script,iframe,style
+sanitizer.disallowed.elements=a,script,iframe,style
+# Only works with BLACKLIST mode. Sample: sanitizer.disallowed.attributes=a.onclick,a.onmouseover,img.onerror,button.onclick (element.attribute)
+sanitizer.disallowed.attributes=img.onerror
+```
+
+* This mode explicitly disables the following HTML elements: `a`, `script`, `iframe`, and `style`.
+* It also explicitly disables the `onError` attribute in `img` elements.
+
+> **Note:** Most of these elements are already sanitized by choosing "BLACKLIST" mode, which also prevents potential SSRF attacks.
+
+Configuration for `WHITELIST` mode:
+
+```text
+# Configuration for HTML sanitizer
+# Sample configuration for HTML sanitizer
+# Modes are WHITELIST, BLACKLIST, NONE (Use at own risk, not recommended)
+sanitizer.mode=WHITELIST
+# Only works with WHITELIST mode. Sample: sanitizer.allowed.elements=p,div,span,ul,ol,li,h1,h2,h3,a
+sanitizer.allowed.elements=p,div,span,ul,ol,li,h1,h2,h3,a
+# Only works with WHITELIST mode. Sample: sanitizer.allowed.attributes=a.href,a.target,img.src,img.alt,div.class (element.attribute)
+sanitizer.allowed.attributes=img.src
+```
+
+* This mode explicitly disables the following HTML elements: `p`, `div`, `span`, `ul`, `ol`, `li`, `h1`, `h2`, `h3`, and `a`.
+* It also explicitly disables the `src` attribute in `img` elements.
+
+> **Note:** You cannot enable SSRF critical elements with the whitelist.
+
+Configuration for `None` mode:
+
+```text
+# Configuration for HTML sanitizer
+# Sample configuration for HTML sanitizer
+# Modes are WHITELIST, BLACKLIST, NONE (Use at own risk, not recommended)
+sanitizer.mode=NONE
+```
+
+> **Important:** This mode is not recommended. Use this at your own risk.
+
+* This mode re-enables all HTML features such as embedded script tag execution or preview of iframes. However, this comes with the cost of potential SSRF attacks.
+* If you choose to select this mode, the behavior is exactly the same as older DTE versions prior to 2.4.2.

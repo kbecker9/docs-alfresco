@@ -113,7 +113,8 @@ The main decision is involved around when to split and how to split.
 **When to split:** There are a number of indicators to help you decide when to split your architecture from a single node environment to a distributed node environment. Some of the indicators to look for include:
 
 * Low disk space
-* CPU running out of memory
+* High CPU usage
+* Frequent out of memory errors
 * High indexing load
 
 **How to split:** When you've decided to upgrade from a single node environment to a distributed or clustered environment, you must find the most appropriate way to cluster architecture.
@@ -173,11 +174,21 @@ This information describes the configuration of Hazelcast clustering between ins
 
 In a load balanced environment, Share now uses Hazelcast to provide multicast messaging between the web-tier nodes. As a result, Share caches no longer need to be disabled for any node, simple cache invalidation message are sent to all nodes when appropriate. Each node functions practically as fast as a single Share instance, enhancing the overall performance of Share.
 
-To enable Hazelcast clustering between Share instances, configure the `custom-slingshot-application-context.xml` file found at `<TOMCAT-HOME>/shared/classes/alfresco/web-extension`. This file is used to override the Spring application context beans for Share.
+To enable Hazelcast clustering between Share instances, configure the `custom-slingshot-application-context.xml` file and place it in the `<TOMCAT-HOME>/shared/classes/alfresco/web-extension` folder. This file is used to override the Spring application context beans for Share.
 
-> **Note:** An example `custom-slingshot-application-context.xml.sample` file is provided in the distribution, which now includes this configuration.
+> **Note:** An example file which includes this configuration is provided in the distribution.zip and is located at
+> `web-server/shared/classes/alfresco/web-extension/web-extension/custom-slingshot-application-context.xml.sample`
+> as well as in the extracted `share.war` under
+> `web-server/webapps/share/WEB-INF/classes/alfresco/web-extension/custom-slingshot-application-context.xml.sample`.
 
 To enable the Hazelcast cluster messaging, edit this section on each Share Tomcat instance:
+
+> **Note:** For the correct version numbers of both Spring beans and Hazelcast Spring, list the files referring to Hazelcast in the following directory:
+> 
+> ```text
+> cd <tomcat_home>/webapps/share/WEB-INF/lib
+> ls -al | grep hazelcast
+> ```
 
 ```xml
 <?xml version='1.0' encoding='UTF-8'?>
@@ -185,13 +196,13 @@ To enable the Hazelcast cluster messaging, edit this section on each Share Tomca
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:hz="http://www.hazelcast.com/schema/spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                http://www.springframework.org/schema/beans/spring-beans-x.x.xsd
                 http://www.hazelcast.com/schema/spring
-                http://www.hazelcast.com/schema/spring/hazelcast-spring-2.4.xsd">
+                http://www.hazelcast.com/schema/spring/hazelcast-spring-x.x.xsd">
    <!--
         Hazelcast distributed messaging configuration - Share web-tier cluster config
         - see http://www.hazelcast.com/docs.jsp
-        - and specifically http://docs.hazelcast.org/docs/2.4/manual/html-single/#SpringIntegration
+        - and specifically https://docs.hazelcast.org/docs/x.x/manual/html-single/#SpringIntegration
    -->
    <!-- Configure cluster to use either Multicast or direct TCP-IP messaging - multicast is default -->
    <!-- Optionally specify network interfaces - server machines likely to have more than one interface -->
@@ -199,14 +210,13 @@ To enable the Hazelcast cluster messaging, edit this section on each Share Tomca
    <hz:topic id="topic" instance-ref="webframework.cluster.slingshot" name="slingshot-topic"/>
    <hz:hazelcast id="webframework.cluster.slingshot">
       <hz:config>
-         <hz:group name="slingshot" password="alfresco"/>
          <hz:network port="5801" port-auto-increment="true">
             <hz:join>
-               <hz:multicast enabled="true"
+               <hz:multicast enabled="false"
                      multicast-group="224.2.2.5"
                      multicast-port="54327"/>
-               <hz:tcp-ip enabled="false">
-                  <hz:members></hz:members>
+               <hz:tcp-ip enabled="true">
+                  <hz:members>192.168.15,192.168.16</hz:members>
                </hz:tcp-ip>
             </hz:join>
             <hz:interfaces enabled="false">
@@ -223,7 +233,7 @@ To enable the Hazelcast cluster messaging, edit this section on each Share Tomca
 </beans>
 ```
 
-This configuration enables the Hazelcast Spring integration, which in turn, starts the Hazelcast server. The Hazelcast server is easily configurable and can use either multicast (default) or TCP-IP direct, if preferred. For more information, see the [Hazelcast Documentation](https://hazelcast.com/products/in-memory-computing/#resources){target="_blank"}.
+This configuration enables the Hazelcast Spring integration, which in turn, starts the Hazelcast server. The Hazelcast server is easily configurable and can use either multicast (default) or TCP-IP direct, if preferred. For more information, see the [Hazelcast Documentation](https://hazelcast.com/products/in-memory-computing/#resources){:target="_blank"}.
 
 If this configuration is enabled, the Share instance becomes a cluster node and Hazelcast is started. If this configuration is disabled (such as, for a default install), then Hazelcast is not started. While using Share, only when any of the following actions occur, the cache invalidation messages will be sent from the affected node to other nodes in the cluster:
 
@@ -260,6 +270,14 @@ INFO: /127.0.0.1]:5801 [slingshot] Address[127.0.0.1]:5801 is STARTED
 
 The message shows that the configuration has successfully initialized Hazelcast between Share instances.
 
+### Share Cluster Troubleshooting
+
+In case the Share cluster does not start, check the `share.log` for details.
+
+> **Note**: To setup an ACS Share cluster without internet connection, make sure to check the Hazelcast
+> `xsi:schemaLocation=http://www.hazelcast.com/schema/spring/hazelcast-spring-<version-string>.xsd` is the same Hazelcast version as in the corresponding Share lib
+> `share/WEB-INF/lib/hazelcast-spring-<version>.jar`.
+
 ### Configure Alfresco Share clustering
 
 These steps are required for cluster configuration for Share. If you're using an HTTP load-balancing mechanism in front of a clustered installation, ‘sticky’ routing must be enabled for the HTTP requests made by the Share tier to the repository tier (the `/alfresco` application).
@@ -286,6 +304,7 @@ The repository server cluster consists of the following components:
 * Content store
 * Solr server
 * Load balancer
+* (Optional) Hazelcast cluster
 
 ### Install and configure Content Services nodes
 
@@ -332,8 +351,159 @@ This topic describes the instructions for installing and configuring Solr nodes 
 5. If you're using HTTP transport, then make sure that the following property is set in `<classpathRoot>/alfresco-global.properties`:
 
     ```text
-    `solr.secureComms=none`
+    solr.secureComms=none
     ```
+
+6. If you wish to proceed with the default embedded Hazelcast clustering mechanism, you're done.
+
+    However, if you wish to manage your own external Hazelcast cluster, you should additionally follow the instructions highlighted in the next section [Set up repository clustering via external Hazelcast](#set-up-repository-clustering-via-external-hazelcast).
+
+### Set up repository clustering via external Hazelcast
+
+Managing your own Hazelcast cluster allows you to scale repository and Hazelcast instances independently, while also allowing you to manage resources allocation on an individual level. This kind of setup provides more fine-grained control at the cost of more necessary preliminary work.
+
+1. Prepare a valid Hazelcast XML configuration file including all caches definitions required by the repository. This can be mostly auto-generated for you by doing the following:
+
+    1. Locate the `caches.properties` file within the `alfresco.war:WEB-INF\lib\alfresco-repository-*.jar` archive.
+    2. Copy the `caches.properties` file to an easily accessible directory.
+    3. Clone the [alfresco-community-repo.git](https://github.com/Alfresco/alfresco-community-repo.git){:target="_blank"} repository locally.
+    4. Move into the previously cloned repository's directory.
+    5. Making sure that Python 3 is installed and available in the `PATH` by running the following command in your terminal of choice, replacing the path to the `caches.properties` file accordingly:
+
+        ```bash
+        python repository/scripts/hazelcast-init/generate-hazelcast-config.py -s </path/to/caches.properties>
+        ```
+
+    6. You should now have an auto-generated `repository/scripts/hazelcast-init/alfresco-hazelcast-config.xml` file including all required caches definitions.
+
+2. Replace the `<cluster-name>` within the `alfresco-hazelcast-config.xml` file with a secure value that is hard to guess. For all intents and purposes this field should be treated as a password, as if matching it allows client-server / member-member connection.
+
+3. Add the desired network configuration to the `alfresco-hazelcast-config.xml` to appropriately define your cluster topology as explained by the [Hazelcast Network Configurations documentation](https://docs.hazelcast.com/hazelcast/5.3/clusters/network-configuration){:target="_blank"}.
+
+4. Apply the generated XML configuration to your Hazelcast nodes according to the [Hazelcast documentation](https://docs.hazelcast.com/hazelcast/5.3/configuration/configuring-declaratively){:target="_blank"}.
+
+5. Configure the repository nodes so that they’re able to connect to your external Hazelcast cluster and won’t spin up an embedded Hazelcast instance. This can be done by setting the following repository properties:
+
+    ```text
+    # turns off the embedded Hazelcast initialization
+    alfresco.hazelcast.embedded=false
+    # points to a single member of the Hazelcast cluster to connect to
+    alfresco.hazelcast.client.address=my-hazelcast-node:5701
+    # should match the cluster-name just specified in the alfresco-hazelcast-config.xml
+    alfresco.cluster.name=MySecureClusterName
+    ```
+
+6. (Optional) If, after having configured all repository nodes, you notice there are Hazelcast cluster members that haven't been configured as the `alfresco.hazelcast.client.address` for any of the repository nodes, then all repository nodes should be additionally configured to have the following property appropriately set:
+
+    ```text
+    # should be a comma-separated list of all external Hazelcast nodes that have not been configured
+    # as the alfresco.hazelcast.client.address for ANY instance within the repository cluster
+    alfresco.cluster.additional-members=some-hazelcast-node:5701,some-other-hazelcast-node:5701
+    ```
+
+This ensures that the cluster information is more appropriately registered and validated via the process explained in [Testing the cluster](#testing-the-cluster). It should only be necessary in the eventuality that there are more Hazelcast nodes than repository nodes, as otherwise it should always be possible to configure the repository nodes to connect to a different member of the external Hazelcast cluster until all such members are exhausted, without the need to configure the `alfresco.cluster.additional-members` property at all.
+
+### Install and configure Hazelcast
+
+In order to meet high availability deployment requirements, Content Services uses Hazelcast, an open-source distributed in-memory object store that supports a wide variety of data structures such as Map, Set, and List. It is important to harden (improve the security) of the cluster because it may expose sensitive data, including user session information, from the application layer to the network layer if the default configuration is not changed.
+
+**Note:** Hazelcast Community Edition security features are limited, thus the mitigations are mainly related to the network layer plus application layer checks, where Alfresco programmatically permits only to database stored nodes the access to the cluster.
+
+#### Secure Hazelcast Community Edition
+
+Follow the steps below as soon as you create your cluster:
+
+* Don’t allow Hazelcast to bind to all network interfaces (deactivated by default, defined via the `alfresco.hazelcast.bind.any=false` property).
+* Specify which network interfaces should be used by Hazelcast for clustering purposes, see [Step 3: Set up repository server cluster]({% link content-services/latest/admin/cluster.md %}#setuprepocluster) for more information (the interface specification is disabled by default).
+* Specify the Hazelcast port and don’t enable the port auto-increment feature, see [Clustering properties]({% link content-services/latest/admin/cluster.md %}#clustering-properties) for more information.
+* Configure the network appropriately within the cluster, so that Hazelcast ports are only reachable within the boundaries of the internal network that connects the cluster members within each other.
+
+Optionally, the default Alfresco Hazelcast XML configuration can be completely overridden for fine-tuning purposes. To change the configuration file, override the `alfresco.hazelcast.configLocation` property and provide your own configuration file.
+
+#### Secure Hazelcast Enterprise Edition
+
+Depending on your organization security policies and guidelines, a Hazelcast Enterprise license might be required to implement further hardening on the cluster. Alfresco does not provide this license so please refer to the [Hazelcast Security Suite](https://hazelcast.com/product-features/security-suite/){:target="_blank"} for details.
+
+We recommend to enable:
+
+* TLS to encrypt the data transmission among the nodes of the cluster in case a malicious user gains access to the network layer
+* mTLS to authenticate nodes with certificates so that their identity can be cryptographically verified
+
+#### Use a unique random UUID as cluster name
+
+Given that the Hazelcast cluster name consists of the Repository name and the Repository ID, you should consider changing this value to one that can’t be easily guessed.
+
+> **Note:** This compensating control applies to Content Services up to (and including) [version 7.3.x]({% link content-services/7.3/admin/cluster.md %}#setuprepocluster). From Content Services 7.4.0 onwards, this procedure is applied automatically.
+
+1. Open the Admin Console.
+
+2. In the Repository Services section, click **Repository Server Clustering**. You should now see the Repository Server Clustering page.
+
+3. Take note of the current Cluster ID (for example: `MainRepository-3c8081c0-8c36-4719-805e-4132f7a4430e`).
+
+4. Shut down all nodes in the cluster.
+
+5. You will need to generate a random UUID. Choose your preferred tool, below is an example with JShell:
+
+    ```JShell
+    jshell> UUID.randomUUID()
+    $1 ==> e1c3e8e5-9e6c-480b-a822-f0d80db0abba
+    ```
+
+6. Create a new cluster name with the generated random UUID according to this formula `{REPOSITORY_NAME}-{RANDOM_UUID}` (according to the current example, the result in this case would be: `MainRepository-e1c3e8e5-9e6c-480b-a822-f0d80db0abba`).
+
+7. Calculate the CRC-32 checksum for the new cluster name. For example, with JShell:
+
+    ```JShell
+    jshell> java.util.zip.CRC32 crc = new java.util.zip.CRC32()
+    jshell> crc.update("MainRepository-e1c3e8e5-9e6c-480b-a822-f0d80db0abba".getBytes("UTF-8"))
+    jshell> crc.getValue()
+    $2 ==> 2144787869
+    ```
+
+8. Get the last 16 characters from the new cluster name (in the current example, it would be: `822-f0d80db0abba`).
+
+9. Prepare the SQL statement to replace the legacy cluster according to the following template:
+
+    ```SQL
+    UPDATE
+        alf_prop_string_value
+    SET
+        string_value = [NEW CLUSTER NAME],
+        string_end_lower = [LAST 16 CHARACTERS],
+        string_crc = [CALCULATED CRC]
+    WHERE
+        id = (
+        SELECT
+            id
+        FROM
+            alf_prop_string_value
+        WHERE
+            string_value =[LEGACY CLUSTER NAME])
+    ```
+
+    Replace the values within the square brackets, in the context of the current example the prepared statement would look like this:
+
+    ```SQL
+    UPDATE
+        alf_prop_string_value
+    SET
+        string_value = 'MainRepository-e1c3e8e5-9e6c-480b-a822-f0d80db0abba',
+        string_end_lower = '822-f0d80db0abba',
+        string_crc = 2144787869
+    WHERE
+        id = (
+        SELECT
+            id
+        FROM
+            alf_prop_string_value
+        WHERE
+            string_value = 'MainRepository-3c8081c0-8c36-4719-805e-4132f7a4430e')
+    ```
+
+10. Execute the prepared SQL statement.
+
+11. Ensure that each node is fully started before starting the next one.
 
 ### Set up repository server cluster
 
@@ -421,7 +591,7 @@ Upon starting the second member, you should see the log message similar to the o
 
 This log message shows that both the servers are now members of the same cluster.
 
-> **Note:** When starting up a clustered environment, the nodes in the cluster should be started in a rolling start, such that each node is fully started before the next is started in the cluster. This prevents any resource/load concurrency conflicts.
+> **Note:** When starting up a clustered environment, the nodes in the cluster should be started in a rolling start, such that each node is fully started before the next is started in the cluster. This prevents any resource/load concurrency conflicts. Additionally, if relying on external Hazelcast nodes for repository clustering purposes, it is recommended to verify that all Hazelcast cluster members are up and running before starting any of the repository instances.
 
 ### Managing members of a cluster {#managecluster}
 
@@ -456,6 +626,8 @@ Servers connected to the same database instance are usually clustered automatica
     | IP | This specifies the IP address of the server, for example `x.x.x.x`. |
     | Port | This specifies the port number of the server, for example `5701`. |
     | Last Registered | This specifies the date and time when the cluster member was last started, for example `02-Oct-2013 12:48:37`. |
+    | Node Type | This specifies the server type, for example `Repository server` / `Hazelcast server`. |
+    | Repository IP | If the Node Type is `Hazelcast server`, this specifies the IP address of the linked Repository instance. Otherwise, it will be blank as the Repository IP is already specified by the `IP` property. |
     | Number of Members | This specifies the total number of members in the cluster, for example `1`. |
 
     **For Offline Cluster Members: Server Details**
@@ -466,6 +638,8 @@ Servers connected to the same database instance are usually clustered automatica
     | IP | This specifies the IP address of the offline server, for example `x.x.x.x`. |
     | Port | This specifies the port number of the offline server, for example `5701`. |
     | Last Registered | This specifies the date and time when the offline cluster server was last started, for example `02-Oct-2013 12:48:37`. |
+    | Node Type | This specifies the server type, for example `Repository server` / `Hazelcast server`. |
+    | Repository IP | If the Node Type is `Hazelcast server`, this specifies the IP address of the linked Repository instance. Otherwise, it will be blank as the Repository IP is already specified by the `IP` property. |
 
 4. Click **Remove from list** to decommission a particular cluster member.
 
@@ -536,6 +710,11 @@ Configure the repository server cluster by setting these properties in the alfre
 | alfresco.hazelcast.port | This specifies the port to use for clustering, for example `5701`. |
 | alfresco.hazelcast.autoinc.port | This enables Hazelcast to make several attempts to find a free port starting at the value of `alfresco.hazelcast.port`.<br><br>**Note:** It's recommended that you do not use this property, for example `false`. |
 | alfresco.hazelcast.max.no.heartbeat.seconds | This specifies the maximum timeout of heartbeat in seconds for a node to assume it is dead, for example `15`. |
+| alfresco.hazelcast.embedded | This specifies if Hazelcast should be embedded or if the repository should rely on an external Hazelcast cluster instead. Default: `true`. |
+| alfresco.hazelcast.client.address | This specifies the address of one of the members of the external Hazelcast cluster to connect to, for example `192.168.1.123:5701`.<br><br>This is only relevant if `alfresco.hazelcast.embedded=false`. |
+| alfresco.hazelcast.client.configLocation | This specifies location of the XML file that is used to configure the Hazelcast client used by Alfresco to connect to the external Hazelcast cluster. Default: `classpath:alfresco/hazelcast/hazelcast-client.xml`.<br><br>This is only relevant if `alfresco.hazelcast.embedded=false`. |
+| alfresco.cluster.name | This needs to match the name of the configured external Hazelcast cluster if `alfresco.hazelcast.embedded=false`. |
+| alfresco.cluster.additional-members | This should be a comma-separated list of all external Hazelcast members that are not already configured as the `alfresco.hazelcast.client.address` for any ACS instance in the cluster, for example `192.168.1.124:5701,192.168.1.125:5701`.<br><br>This is only relevant if `alfresco.hazelcast.embedded=false.` |
 
 ## Tracking clustering issues
 
@@ -544,7 +723,8 @@ Use this information to track clustering issues.
 * The main clustering debug information can be customized using the following log4j setting (default value is `INFO`):  
 
     ```text
-    log4j.logger.org.alfresco.enterprise.repo.cluster=info
+    logger.alfresco-enterprise-repo-cluster.name=org.alfresco.enterprise.repo.cluster
+    logger.alfresco-enterprise-repo-cluster.level=info
     ```
 
 * For a better control and more detailed clustering debug information, the following category can be configured:  
@@ -588,20 +768,24 @@ Use this information to track clustering issues.
 * An important aspect of clustering is caching. To log cache creation (for example, increase the cache related logging to DEBUG level), enable the following log categories:
 
     ```text
-    log4j.logger.org.alfresco.enterprise.repo.cluster.cache=DEBUG
-    log4j.logger.org.alfresco.repo.cache=DEBUG
+    logger.alfresco-enterprise-repo-cluster-cache.name=org.alfresco.enterprise.repo.cluster.cache
+    logger.alfresco-enterprise-repo-cluster-cache.level=info
+    logger.alfresco-repo-cache.name=org.alfresco.repo.cache
+    logger.alfresco-repo-cache.level=info
     ```
 
 * The underlying clustering technology, Hazelcast, is configured to use `log4j` for logging. Therefore, you can configure logging for the whole Hazelcast top-level package, as shown:
 
     ```text
-    log4j.logger.com.hazelcast=info
+    logger.hazelcast.name=com.hazelcast
+    logger.hazelcast.level=info
     ```
 
     To increase logging from Hazelcast’s member joining mechanism, enable the following log category:
 
     ```text
-    log4j.logger.com.hazelcast.impl.TcpIpJoiner=debug
+    logger.hazelcast-impl-TcpIpJoiner.name=com.hazelcast.impl.TcpIpJoiner
+    logger.hazelcast-impl-TcpIpJoiner.level=debug
     ```
 
 * Alfresco uses the Hazelcast library internally for clustering synchronization of data. With the addition of Java 11 modules, there is a warning in the application startup log for the repository app, as shown:

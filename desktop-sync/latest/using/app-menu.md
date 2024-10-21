@@ -26,23 +26,23 @@ The following section goes through each one of the Desktop Sync menu items.
 
 Displays information about checked out files, any pending syncs, and conflicts.
 
-![]({% link desktop-sync/images/conflict.png %}){:height="374px" width="756px"}
+![]({% link desktop-sync/images/conflict-1.17.png %}){:height="374px" width="756px"}
 
-* Select **Files Checked Out** to view information about any files you've checked out from Desktop Sync, for example, file name, file location, and details when the file was downloaded.
-* Select **Pending Syncs** to view information about any pending syncs, for example, file name, status of the pending sync, modifier, file location, and details when the file was last accessed.
+* Select **Checked out** to view information about any files you've checked out from Desktop Sync, for example, file name, file location, and details when the file was downloaded.
+* Select **Pending** to view information about any pending syncs, for example, file name, status of the pending sync, modifier, file location, and details when the file was last accessed.
 * Select **Conflicts** to view conflict-related information and resolve the conflict. The information displayed includes file name, the conflict or issue, modifier, location of the conflict, and details when the file was last modified.
 * Select the file in conflict and click **Resolve**.
 
 To resolve a conflict, choose which version to keep, Alfresco or your changes and click **Keep**:
 
-![]({% link desktop-sync/images/conflict-resolution.png %}){:height="246px" width="350px"}
+![]({% link desktop-sync/images/conflict-resolution-1.17.png %}){:height="246px" width="350px"}
 
-* **Alfresco Version**: Replaces the local file with the Alfresco copy.
-* **My Version**: Copies updates made to content locally to Alfresco.
+* **Alfresco version**: Replaces the local file with the Alfresco copy.
+* **My version**: Copies updates made to content locally to Alfresco.
 
-##### Working with multiple Checked Out files
+##### Working with multiple checked out files
 
-If several files are **Checked Out**, you have the following options:
+If several files are **Checked out**, you have the following options:
 
 * Select files individually using the check boxes to the left hand side, or use the select all files check box at the top.
 * When you select more than one check box, you can pick bulk actions at the top of the tab, **Check In** and **Cancel Check Out**. If you choose **Check In**, you can select if the new version is a major or minor change, and optionally input a comment. Select **Check In** again to save your changes. This applies the same version change and comment (if added) to all the selected files.
@@ -61,6 +61,13 @@ You can only search the content that's already synced in the `Alfresco` folder. 
 * You can view the search results listed by *Name*, *Location*, *Modified Date*, and *Size*. You can also search by file name and file extension, for example, by entering `png` or `.png`.
 * To locate a file from the **Search** dialog, double-click the file/folder icon to show the content in Windows Explorer.
 
+#### Recent Files
+
+Click **Recent Files** to open the Recent Files dialog and view your recently used files in the `Alfresco` sync folder.
+
+* The recently used files are listed by *Name*, *Location*, *Modified Date*, and *Size*, where the most recently updated file is at the top.
+* To locate a file from the **Recent Files** dialog, double-click the required file to show the content in Windows Explorer.
+
 #### Sync Now
 
 By default local content is synced to Alfresco immediately and Alfresco content is synced locally every five minutes. Click this if you want content synced immediately.
@@ -71,24 +78,28 @@ Pauses Sync if you don't wish to synchronize files from the server, for example 
 
 #### Manage Your Account
 
-You can manage which folders and sites get synced on your desktop and other account details 
-using **Manage Your Account**. The available options are:
+You can manage which folders and sites get synced on your desktop and other account details using **Manage Your Account**. The available options are:
 
-* **Manage Folders...**: Opens Choose folders and sites to sync screen. See [Select content to sync]({% link desktop-sync/latest/using/select-to-sync.md %}#sync/windows).
+* **Manage Folders**: Opens Choose folders and sites to sync screen. See [Select content to sync]({% link desktop-sync/latest/using/select-to-sync.md %}#sync/windows).
 
     If you deselect a previously synced folder and click **Sync**, then the synced content from your desktop is removed. In case you have any unsynced or conflicted files, they will be orphaned in `C:\Users\<username>\Alfresco\`orphaned.
+
+* **Consistency Check**: Performs a consistency check on Desktop Sync. This is typically used in collaboration with your IT team when you need support.
+
+* **Account Information**: View the account information for Desktop Sync:
+
+    * **User Name** for the currently logged in user.
+    * **Storage Used** by the `Alfresco` sync folder on your hard drive.
+
+* **Enter Your New Password**: If you have recently changed your Alfresco password, use this option to update the same password in Desktop Sync.
+
+    The **Have you recently changed your password in Alfresco?** window appears. Specify the updated password to resume syncing and click **Update**.
 
 * **Remove Local Content**: Removes all the synced content from Desktop Sync without the need to remove the user account. This provides support for a customer policy where content is only kept on a device when users are actively working on that content and using Desktop Sync.
 
     To start using Desktop Sync again, you'll need to set up your synced files via the **Manage Your Account > Manage Folders** menu option. See [Select content to sync]({% link desktop-sync/latest/using/select-to-sync.md %}#sync/windows).
 
-* **Remove Account...**: Removes the synced user from Desktop Sync and deletes all the synced content from the desktop. You can still access your files in Alfresco. On removing your account you are taken back to the Desktop Sync login screen. See [Setting up Desktop Sync]({% link desktop-sync/latest/install/index.md %}#setting-up-desktop-sync-on-windows).
-
-* **Enter Your New Password...**: If you have recently changed your Alfresco password, use this option to update the same password in Desktop Sync.
-
-    The **Have you recently changed your password in Alfresco?** window appears. Specify the updated password to resume syncing and click **Update**.
-
-* **Consistency Check**: Performs a consistency check on Desktop Sync. This is typically used in collaboration with your IT team when you need support.
+* **Remove Account**: Removes the synced user from Desktop Sync and deletes all the synced content from the desktop. You can still access your files in Alfresco. On removing your account you are taken back to the Desktop Sync login screen. See [Setting up Desktop Sync]({% link desktop-sync/latest/install/index.md %}#setting-up-desktop-sync-on-windows).
 
 #### About
 
@@ -187,23 +198,39 @@ Select Resume Sync to resume syncing with Alfresco Content Services.
 
 Performs a consistency check on Desktop Sync. This is typically used in collaboration with your IT team when you need support.
 
+#### Recent Files {#recent-files-mac}
+
+Click **Recent Files** to open the Recent Files dialog and view your recently used files in the `Alfresco` sync folder.
+
+* The recently used files are listed by *Name*, *Modified Date*, and *Size*, where the most recently updated file is at the top.
+* To locate a file from the **Recent Files** dialog, click the<!-- icon on the right side of the--> required row to show the content in Mac Finder.
+
 #### Manage Sync Folder
 
 Selecting **Manage Sync Folder** opens the Select sites and folders to sync dialog. This allows you to select more content to sync, or deselect content to stop syncing. See [Select content to sync]({% link desktop-sync/latest/using/select-to-sync.md %}#sync/mac) for more.
 
 If you deselect a previously synced folder and click **Sync**, then the synced content from your desktop is removed. In case you have any unsynced or conflicted files, they will be orphaned in `/<userHome>/Alfresco/orphaned`.
 
-#### Remove Local Content
+#### Manage Your Account {#manage-your-account-mac}
 
-Removes all the synced content from Desktop Sync without the need to remove the user account. This provides support for a customer policy where content is only kept on a device when users are actively working on that content and using Desktop Sync.
+* **Account Information**
 
-To start using Desktop Sync again, you'll need to set up your synced files via the **Manage Sync Folder** menu option. See [Select content to sync]({% link desktop-sync/latest/using/select-to-sync.md %}#sync/mac).
+    View the account information for Desktop Sync:
 
-#### Remove Account
+    * **User Name** for the currently logged in user.
+    * **Storage Used** by the `Alfresco` sync folder on your hard drive.
 
-Removes the synced user from Desktop Sync and deletes all the synced content from the desktop. Use this option as the first stage of uninstalling Desktop Sync.
+* **Remove Local Content**
 
-You can still access your files in Alfresco. Any content that can't be removed from your desktop is orphaned. On removing your account you are taken back to the Desktop Sync login dialog. Close the login dialog to quit the application. See [Setting up Desktop Sync]({% link desktop-sync/latest/install/index.md %}#faq/mac).
+    Removes all the synced content from Desktop Sync without the need to remove the user account. This provides support for a customer policy where content is only kept on a device when users are actively working on that content and using Desktop Sync.
+
+    To start using Desktop Sync again, you'll need to set up your synced files via the **Manage Sync Folder** menu option. See [Select content to sync]({% link desktop-sync/latest/using/select-to-sync.md %}#sync/mac).
+
+* **Remove Account**
+
+    Removes the synced user from Desktop Sync and deletes all the synced content from the desktop. Use this option as the first stage of uninstalling Desktop Sync.
+
+    You can still access your files in Alfresco. Any content that can't be removed from your desktop is orphaned. On removing your account you are taken back to the Desktop Sync login dialog. Close the login dialog to quit the application. See [Setting up Desktop Sync]({% link desktop-sync/latest/install/index.md %}#faq/mac).
 
 #### Help
 
@@ -221,26 +248,26 @@ You won't be able to sync content during this time. Syncing will resume when you
 
 It's recommended that you always have Desktop Sync up and running so that your local content and Alfresco are in sync.
 
-### Check Outs, Conflicts and Pending Syncs {#checkouts-conflicts-pendingsyncs}
+### Check Outs, Conflicts and Pending {#checkouts-conflicts-pendingsyncs}
 
 Displays information about checked out files, any pending syncs, and conflicts.
 
-![]({% link desktop-sync/images/ds-tabbed-ui.png %}){:height="358px" width="260px"}
+![]({% link desktop-sync/images/ds-tabbed-ui-1.17.png %}){:height="358px" width="260px"}
 
-* Select **Checked Out** to view information about any files you've checked out from Desktop Sync, for example, file name, file location, and details when the file was downloaded.
+* Select **Checked out** to view information about any files you've checked out from Desktop Sync, for example, file name, file location, and details when the file was downloaded.
 * Select **Pending** to view information about any pending syncs, for example, file name, status of the pending sync, modifier, file location, and details when the file was last accessed.
 * Select **Conflicts** to view conflict-related information and resolve the conflict. The information displayed includes file name, the conflict or issue, modifier, location of the conflict, and details when the file was last modified.
 
     To resolve a conflict, select the conflict and either click:
 
-    * **Discard my Changes**: Replaces the local file with the Alfresco copy.
-    * **Keep my Changes**: Copies updates made to content locally over to Alfresco.
+    * **Discard my changes**: Replaces the local file with the Alfresco copy.
+    * **Keep my changes**: Copies updates made to content locally over to Alfresco.
 
-> **Note:** There may be times when you can't resolve a conflict for a file because the parent folder also has a conflict. In this case, your only choice is to resolve the conflict on the folder by either selecting **Keep my Changes** or **Discard my Changes**. Your choice is then applied to all files within that folder.
+> **Note:** There may be times when you can't resolve a conflict for a file because the parent folder also has a conflict. In this case, your only choice is to resolve the conflict on the folder by either selecting **Keep my changes** or **Discard my changes**. Your choice is then applied to all files within that folder.
 
-### Working with multiple Checked Out files {#working-with-multiple-checkedout-files-mac}
+### Working with multiple checked out files {#working-with-multiple-checkedout-files-mac}
 
-If several files are **Checked Out**, you have the following options:
+If several files are **Checked out**, you have the following options:
 
 * Select files individually using the check boxes to the left hand side, or use the select all files check box at the top.
 * When you select more than one check box, you can pick bulk actions at the top of the tab, **Check In** and **Cancel Check Out**. If you choose **Check In**, you can select if the new version is a major or minor change, and optionally input a comment. Select **Check In** again to save your changes. This applies the same version change and comment (if added) to all the selected files.

@@ -15,11 +15,11 @@ recommended for development and test environments only.
 * Access to [Quay](http://www.quay.io){:target="_blank"}
     * Alfresco customers can request Quay.io credentials by logging a ticket at [Alfresco Support](https://support.alfresco.com/). These credentials are required to pull private (Enterprise-only) Docker images from Quay.io.
 
-> **Note:** Make sure that the following ports are free on your computer: 5432, 8080, 8082, 8083. These ports are set in the `docker-compose.yml` file.
+> **Note:** Make sure that the following ports are free on your computer: 5432, 8080. These ports are set in the `docker-compose.yml` file.
 
-## Installation steps
+## Deployment steps
 
-1. Download the latest Alfresco Content Services `docker-compose.yml` file by accessing the [trial download page](https://www.alfresco.com/platform/content-services-ecm/trial/download).
+1. Download the `docker-compose.yml` file by accessing the Content Services [Download Trial](https://www.hyland.com/en/resources/alfresco-ecm-download) page, which will give you a 30-day license.
 
 2. Save the file in a local folder.
 
@@ -31,19 +31,19 @@ recommended for development and test environments only.
     ```text
     services:
         alfresco:
-            #image: alfresco/alfresco-content-repository:7.3.x
-            image: quay.io/alfresco/alfresco-governance-repository-enterprise:7.3.x
+            #image: alfresco/alfresco-content-repository:23.x.x
+            image: quay.io/alfresco/alfresco-governance-repository-enterprise:23.x.x
             mem_limit: 1700m
-           
     ```
 
     ```text
         share:
-            #image: alfresco/alfresco-share:7.3.x
-            image: quay.io/alfresco/alfresco-governance-share-enterprise:7.3.x
+            #image: alfresco/alfresco-share:23.x.x
+            image: quay.io/alfresco/alfresco-governance-share-enterprise:23.x.x
             mem_limit: 1g
-           
     ```
+
+    Replace the ACS versions (for example, ACS 23.1.1) with the compatible AGS versions (for example, AGS 23.1.1).
 
 4. In a command prompt login to Quay using the following command (to open up access to Enterprise Docker images):
 
@@ -68,13 +68,13 @@ recommended for development and test environments only.
     $ docker-compose up -d
    ```
 
-7. Wait for the logs to complete.
+6. Wait for the logs to complete.
 
     ```text
     ...
-    alfresco_1            | 09-Jun-2020 08:41:58.156 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
-    alfresco_1            | 09-Jun-2020 08:41:58.206 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
-    alfresco_1            | 09-Jun-2020 08:41:58.261 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 226026 ms
+    alfresco_1            | ... INFO ... [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+    alfresco_1            | ... INFO ... [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+    alfresco_1            | ... INFO ... [main] org.apache.catalina.startup.Catalina.start Server startup in 226026 ms
     ```
 
     If you encounter errors whilst the system is starting up:
@@ -88,10 +88,10 @@ recommended for development and test environments only.
 
     * Try allocating more memory resources, as advised in `docker-compose.yml`. For example, in Docker, change the memory setting in **Preferences** (or **Settings**) > **Advanced** > **Memory**, to at least 6 GB. Make sure you restart Docker and wait for the process to finish before continuing.
     * Go back and retry the deployment.
-    
+
     > **Note:** Although 16 GB is the required minimum memory setting, keep in mind that 6 GB is much lower than the required minimum, and may need to be adapted for your environment.
 
-8. Open your browser and check everything starts up correctly:
+7. Open your browser and check everything starts up correctly:
 
     * Share: `http://localhost:8080/share`
 

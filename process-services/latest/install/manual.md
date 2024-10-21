@@ -206,7 +206,10 @@ Ensure you have read the [supported platforms]({% link process-services/latest/s
         > **Important:** Ensure that the driver for your database is on the classpath of the web application.
 
     3. Set a location for the file content to be at using `contentstorage.fs.rootFolder`.
-
+       
+        > **Important:** Ensure that the path exists; for example if you set `contentstorage.fs.rootFolder=/var/lib/act_data` the path `/var/lib/act_data` must exist and be accessible by the process user.  
+        > If the folder doesn't exist them you won't be able to upload files from your pc to Activiti.
+ 
     4. Set a location for the search and analytics indexes using `elastic-search.data.path`.
 
 6. Ensure that the driver for your database is on the classpath of your web container.
@@ -309,7 +312,9 @@ After installing you will need to [apply a valid license file](#license) to your
 
 A valid license file is required to run Process Services.
 
-A license file can be obtained from [support](https://support.alfresco.com){:target="_blank"} or a link is provided via email to download a temporary (30-day) license if you signed up for a free trial.
+Customers can download and request licenses from the Customer Portal in [Hyland Community](https://community.hyland.com/customer-portal/licensing/alfresco/request/){:target="_blank"}.
+
+You can download a trial license from [https://www.hyland.com/alfresco/aps-trial-license/activiti-trial.zip](https://www.hyland.com/alfresco/aps-trial-license/activiti-trial.zip).
 
 Logging into Process Services as an administrator will display a notification if a license is not currently valid.
 Notifications are displayed when:

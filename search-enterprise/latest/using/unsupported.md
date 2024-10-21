@@ -2,19 +2,11 @@
 title: Unsupported features
 ---
 
-The following features, which were supported with Search and Insight Engine 2.x and Search Services 2.x (Solr) are not supported in the latest release for Search Enterprise 3.x (Elasticsearch).
-
-## Indexing
-
-* Indexing of nodes created during content repository bootstrap. For example, the sample site data.
+The following features, which were supported with Search and Insight Engine 2.x and Search Services 2.x (Solr) are not supported in the latest release for Search Enterprise 4.x.
 
 ## Search features
 
-* Aspect queries (it works only using exact aspect name)
-* Highlighting
 * Fingerprinting
-* Multi-lingual support (documents will be accepted and searchable with multiple languages, but only English grammar rules will be applied)
-* Template search
 * Resource limiting
 * Scoped search
 * Statistics
@@ -22,8 +14,6 @@ The following features, which were supported with Search and Insight Engine 2.x 
 ### Search Syntax
 
 * Fuzzy matching
-* Search for spans and positions
-* Search for boosts
 * Field Facets Pagination
 * Field Facets Tags Exclusion
 
@@ -31,11 +21,9 @@ The following features, which were supported with Search and Insight Engine 2.x 
 
 * PATHWITHREPEATS
 * PNAME
+* ANAME
 * NPATH
-* PARENT
-* PRIMARYPARENT
 * QNAME
-* ANCESTOR
 * PRIMARYASSOCQNAME
 * PRIMARYASSOCTYPEQNAME
 * FINGERPRINT
@@ -58,39 +46,30 @@ The following features, which were supported with Search and Insight Engine 2.x 
 * DENYSET
 * FTSSTATUS
 
-## Alfresco Digital Workspace
+## Behavior of unsupported fields
 
-To ensure ADW basic functionality the part of a query that contains an unsupported field will be ignored and the REST API will return a 200 HTTP code. A warning message will be produced in the Alfresco Repository log.
+Supplying an unsupported or non-existent field will cause a query to fail. This is a change in behavior from Search and Insight Engine and Search Services, which silently ignore these issues.
 
-All unsupported fields will be ignored in queries and filters following the schema below:
+Search Enterprise focuses on the most commonly used features, and in some cases allows you to work around unsupported features.
+The following are examples of how to use different fields for queries:
 
-* The query contains only an unsupported field, for example `QNAME:hello` returns an empty result.
-* The query contains a supported field, for example `hello AND QNAME:goodbye` returns only documents containing “hello”.
-* A filter contains only an unsupported field, for example `query=banana`, `filter=QNAME:hello` returns only documents containing “banana”.
-* A filter contains two filters or a filter with a supported field and an unsupported field. For example, `query=banana filter=[QNAME:hello, cm:name:test]`, returns all documents containing “test” and “banana”. Another example, `query=banana filter=QNAME:hello OR cm:name:test`, returns all documents containing “test” and “banana”.
-
-In the examples above, filter queries must be executed using the REST API and not using Alfresco Digital Workspace or Alfresco Share.
+| Old Query | Replacement Query |
+| --------- | ----------------- |
+| QNAME:'comment' | TYPE:'fm:post' |
+| PNAME:'0/wiki' | PATH:'//cm:wiki/*' |
+| NPATH:'2/Company Home/Sites/swsdp' | PATH: '/app:company_home/st:sites/cm:swsdp/*' |
+| ANAME:'0/cdefb3a9-8f55-4771-a9e3-06fa370250f6' | PARENT:'cdefb3a9-8f55-4771-a9e3-06fa370250f6' |
 
 ## Query languages
 
 * SQL query language using JDBC Driver
 
-## Tools & Components
-
-* Alfresco Search and Insight Engine
-* Alfresco Governance Services
-* Alfresco Federation Services
-* Alfresco Enterprise Viewer
-* Alfresco Content Accelerator
-
 ## Unsupported data types and properties
 
-Data types and properties supported in Search and Insight Engine 2.x and Search Services 2.x that are not currently supported for Search Enterprise 3.x.
+Data types and properties supported in Search and Insight Engine 2.x and Search Services 2.x that are not currently supported for Search Enterprise 4.x.
 
 * http&#65279;://www.alfresco.org/model/dictionary/1.0}any
 * http&#65279;://www.alfresco.org/model/dictionary/1.0}assocref
-* http&#65279;://www.alfresco.org/model/dictionary/1.0}category
 * http&#65279;://www.alfresco.org/model/dictionary/1.0}childassocref
 * http&#65279;://www.alfresco.org/model/dictionary/1.0}locale
-* http&#65279;://www.alfresco.org/model/dictionary/1.0}noderef
 * http&#65279;://www.alfresco.org/model/dictionary/1.0}qname

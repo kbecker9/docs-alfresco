@@ -10,9 +10,9 @@ The APIs are designed for you to create remote clients to manage the {% include 
 
 You can download the API Explorer from:
 
-* [Alfresco Nexus repository](https://nexus.alfresco.com/nexus/#welcome){:target="_blank"}
+* [Alfresco Nexus repository](https://nexus.alfresco.com/nexus/){:target="_blank"}
 
-The Governance Services distribution zip contains the `alfresco-governance-services-enterprise-rest-api-explorer-17.173.war` file.
+The Governance Services distribution zip contains the `alfresco-governance-services-enterprise-rest-api-explorer-23.x.x.xxx.war` file.
 
 > **Note:** Contact [Alfresco Support](https://support.alfresco.com/){:target="_blank"} for log in credentials.
 

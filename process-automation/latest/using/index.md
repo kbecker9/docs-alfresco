@@ -189,7 +189,7 @@ The order of the columns can be adjusted.
 
 2. Access the six dots on the top right of a column by hovering your mouse over the name of the column.
 
-2. Click and hold the six dots and then move the column on top of another column.
+3. Click and hold the six dots and then move the column on top of another column.
 
     This moves the columns to the left one position and the column you are moving takes the place of the one underneath.
 
@@ -204,6 +204,21 @@ The columns that are visible can be adjusted.
 3. Select which columns you want show and then click **Apply**.
 
 ![Select columns]({% link process-automation/images/select-columns.png %})
+
+### Column width
+
+You can adjust the width of the columns of the **Process Management** section. To do this select the edge of the columns and adjust them to the desired width. Once you change one column, all the columns with the same name are also adjusted. If you log out and then log back in again, the new column widths is preserved.
+
+This feature is enabled by default for the **Process Management** section. If you want to adjust the column widths in the same way for the **Personal Files** or **File Libraries** sections of the Digital Workspace, you must turn it on by editing the `libs/content-ee/process-services-cloud-extension/assets/process-services-cloud.extension.json` file and adding the following:
+
+```json
+"column-resizing": [
+                    {
+                        "id": "column-resizing",
+                        "enabled": true
+                    }
+                ]
+```
 
 ## Condition builder {#condition-builder}
 
@@ -275,7 +290,7 @@ Click the green button to expand the modal dialog to be full size, the following
 The autocompletion function is based on the context of the project and depends on where the expression is going to be used. It lets the user know which variables in that context are available. The autocompletion is displayed as the user types but can also be triggered by using the following keyboard shortcuts:
 
 * In Windows or Linux: `Ctrl + Space`
-* In MacOS: `Cmd + Space`
+* In MacOS: `Ctrl + Space` or `Fn + Ctrl + Space`
 
 The following is an example.
 
@@ -295,7 +310,7 @@ The expression editor provides helpful information when you place the cursor ove
 
 ## Process Analytics
 
-> **Important:** Process Analytics is a Beta feature. This means it can only be used in a development environment for an experimental use case, and is not intended for production use. It may contain bugs or errors, and may be prone to breaking changes in the future based on Beta testing.
+> **Important:** Process Analytics is only applicable for use by Alfresco Activiti Enterprise customers who are self managed. It is not compatible for use with Process Automation.
 
 Process Analytics exposes a set of APIs that can be used to query business metrics about process instances and user tasks. The query language it uses is GraphQL.
 

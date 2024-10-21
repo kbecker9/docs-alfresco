@@ -1,5 +1,5 @@
-# Alfresco Sync Service 3.8
-- version: 3.8
+# Alfresco Sync Service 5.0
+- version: 5.0
   pages:
     - title: 'Introduction'
       path: '/sync-service/latest/'
@@ -37,6 +37,206 @@
           path: '/sync-service/latest/admin/troubleshoot/'
         - title: 'FAQ'
           path: '/sync-service/latest/admin/faq/'
+
+# Alfresco Sync Service 4.0
+- version: 4.0
+  pages:
+    - title: 'Introduction'
+      path: '/sync-service/4.0/'
+    - title: 'Install'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/4.0/install/'
+        - title: 'Install options'
+          path: '/sync-service/4.0/install/options/'
+        - title: 'Database'
+          path: '/sync-service/4.0/install/database/'
+    - title: 'Configure'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/4.0/config/'
+        - title: 'Run via a script'
+          path: '/sync-service/4.0/config/script/'
+        - title: 'Connect through JMX'
+          path: '/sync-service/4.0/config/jmx/'
+    - title: 'Upgrade'
+      path: '/sync-service/4.0/upgrade/'
+    - title: 'Administer'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/4.0/admin/'
+        - title: 'Cluster'
+          path: '/sync-service/4.0/admin/cluster/'
+        - title: 'Monitor'
+          pages:
+            - title: 'Overview'
+              path: '/sync-service/4.0/admin/monitor/'
+            - title: 'Using Grafana'
+              path: '/sync-service/4.0/admin/monitor/grafana/'
+        - title: 'Troubleshoot'
+          path: '/sync-service/4.0/admin/troubleshoot/'
+        - title: 'FAQ'
+          path: '/sync-service/4.0/admin/faq/'
+
+# Alfresco Sync Service 3.11
+- version: 3.11
+  pages:
+    - title: 'Introduction'
+      path: '/sync-service/3.11/'
+    - title: 'Install'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.11/install/'
+        - title: 'Install options'
+          path: '/sync-service/3.11/install/options/'
+        - title: 'Database'
+          path: '/sync-service/3.11/install/database/'
+    - title: 'Configure'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.11/config/'
+        - title: 'Run via a script'
+          path: '/sync-service/3.11/config/script/'
+        - title: 'Connect through JMX'
+          path: '/sync-service/3.11/config/jmx/'
+    - title: 'Upgrade'
+      path: '/sync-service/3.11/upgrade/'
+    - title: 'Administer'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.11/admin/'
+        - title: 'Cluster'
+          path: '/sync-service/3.11/admin/cluster/'
+        - title: 'Monitor'
+          pages:
+            - title: 'Overview'
+              path: '/sync-service/3.11/admin/monitor/'
+            - title: 'Using Grafana'
+              path: '/sync-service/3.11/admin/monitor/grafana/'
+        - title: 'Troubleshoot'
+          path: '/sync-service/3.11/admin/troubleshoot/'
+        - title: 'FAQ'
+          path: '/sync-service/3.11/admin/faq/'
+
+# Alfresco Sync Service 3.10
+- version: '3.10'
+  pages:
+    - title: 'Introduction'
+      path: '/sync-service/3.10/'
+    - title: 'Install'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.10/install/'
+        - title: 'Install options'
+          path: '/sync-service/3.10/install/options/'
+        - title: 'Database'
+          path: '/sync-service/3.10/install/database/'
+    - title: 'Configure'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.10/config/'
+        - title: 'Run via a script'
+          path: '/sync-service/3.10/config/script/'
+        - title: 'Connect through JMX'
+          path: '/sync-service/3.10/config/jmx/'
+    - title: 'Upgrade'
+      path: '/sync-service/3.10/upgrade/'
+    - title: 'Administer'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.10/admin/'
+        - title: 'Cluster'
+          path: '/sync-service/3.10/admin/cluster/'
+        - title: 'Monitor'
+          pages:
+            - title: 'Overview'
+              path: '/sync-service/3.10/admin/monitor/'
+            - title: 'Using Grafana'
+              path: '/sync-service/3.10/admin/monitor/grafana/'
+        - title: 'Troubleshoot'
+          path: '/sync-service/3.10/admin/troubleshoot/'
+        - title: 'FAQ'
+          path: '/sync-service/3.10/admin/faq/'
+
+# Alfresco Sync Service 3.9
+- version: 3.9
+  pages:
+    - title: 'Introduction'
+      path: '/sync-service/3.9/'
+    - title: 'Install'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.9/install/'
+        - title: 'Install options'
+          path: '/sync-service/3.9/install/options/'
+        - title: 'Database'
+          path: '/sync-service/3.9/install/database/'
+    - title: 'Configure'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.9/config/'
+        - title: 'Run via a script'
+          path: '/sync-service/3.9/config/script/'
+        - title: 'Connect through JMX'
+          path: '/sync-service/3.9/config/jmx/'
+    - title: 'Upgrade'
+      path: '/sync-service/3.9/upgrade/'
+    - title: 'Administer'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.9/admin/'
+        - title: 'Cluster'
+          path: '/sync-service/3.9/admin/cluster/'
+        - title: 'Monitor'
+          pages:
+            - title: 'Overview'
+              path: '/sync-service/3.9/admin/monitor/'
+            - title: 'Using Grafana'
+              path: '/sync-service/3.9/admin/monitor/grafana/'
+        - title: 'Troubleshoot'
+          path: '/sync-service/3.9/admin/troubleshoot/'
+        - title: 'FAQ'
+          path: '/sync-service/3.9/admin/faq/'
+
+# Alfresco Sync Service 3.8
+- version: 3.8
+  pages:
+    - title: 'Introduction'
+      path: '/sync-service/3.8/'
+    - title: 'Install'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.8/install/'
+        - title: 'Install options'
+          path: '/sync-service/3.8/install/options/'
+        - title: 'Database'
+          path: '/sync-service/3.8/install/database/'
+    - title: 'Configure'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.8/config/'
+        - title: 'Run via a script'
+          path: '/sync-service/3.8/config/script/'
+        - title: 'Connect through JMX'
+          path: '/sync-service/3.8/config/jmx/'
+    - title: 'Upgrade'
+      path: '/sync-service/3.8/upgrade/'
+    - title: 'Administer'
+      pages:
+        - title: 'Overview'
+          path: '/sync-service/3.8/admin/'
+        - title: 'Cluster'
+          path: '/sync-service/3.8/admin/cluster/'
+        - title: 'Monitor'
+          pages:
+            - title: 'Overview'
+              path: '/sync-service/3.8/admin/monitor/'
+            - title: 'Using Grafana'
+              path: '/sync-service/3.8/admin/monitor/grafana/'
+        - title: 'Troubleshoot'
+          path: '/sync-service/3.8/admin/troubleshoot/'
+        - title: 'FAQ'
+          path: '/sync-service/3.8/admin/faq/'
 
 # Alfresco Sync Service 3.7
 - version: 3.7

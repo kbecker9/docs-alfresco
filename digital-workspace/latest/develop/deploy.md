@@ -16,7 +16,7 @@ To develop a front-end application using the Alfresco Community Edition (the ope
     http://localhost:8080/alfresco
     ```
 
-* The latest **LTS** version of `Node.js`.
+* `Node.js` 18.x
 
 ### Deploy Content App
 
@@ -61,7 +61,7 @@ If you're an Alfresco customer or official partner, you can use the Enterprise a
     http://localhost:8080/alfresco
     ```
 
-* The latest **LTS** version of `Node.js`.
+* `Node.js` 18.x
 
 ### Deploy Digital Workspace
 
@@ -74,14 +74,12 @@ Deploy Digital Workspace using the following steps:
     | Distribution | Description |
     | ------------ | ----------- |
     | `content-ee` | *Default.* The Digital Workspace with the Process Services extension |
-    | `content-ee-apa` | The Digital Workspace with the Process Automation extension |
 
     > **Note:** This project uses the monorepo structure with several monorepo apps.
 
 2. Create the following `.env` file.
 
     ```bash
-    ACA_BRANCH="2.10.0"
     BASE_URL="http://localhost:8080"
     APP_CONFIG_ECM_HOST="http://localhost:8080"
     APP_CONFIG_PROVIDER="ECM"
@@ -92,7 +90,7 @@ Deploy Digital Workspace using the following steps:
     APP_CONFIG_PLUGIN_AI_SERVICE=false
     ```
 
-    > **Note:** The Digital Workspace 3.1.x uses the Content Application version 3.1.0.
+    > **Note:** The Digital Workspace 4.4.x uses the Content Application version 4.4.x.
 
 3. Open a command prompt and run the following command to install all third-party dependencies:
 
@@ -128,7 +126,6 @@ Deploy Digital Workspace using the following steps:
     APP_CONFIG_LANDING_PAGE="/personal-files"
 
     # CONTENT RELATED
-    ACA_BRANCH="develop"
     APP_CONFIG_PLUGIN_PROCESS_SERVICE=true
     APP_CONFIG_PLUGIN_AI_SERVICE=true
     APP_CONFIG_PLUGIN_AOS=true
@@ -165,7 +162,7 @@ Below are the available tutorials on the most common and requested tasks about d
     http://localhost:8080/alfresco
     ```
 
-* The latest **LTS** version of `Node.js`.
+* `Node.js` 18.x
 
 > **Note:** All Angular development is done using the Typescript language.
 

@@ -28,7 +28,7 @@ See [Supported platforms]({% link transform-service/latest/support/index.md %}) 
 The images downloaded directly from [Docker Hub](https://hub.docker.com/u/alfresco/){:target="_blank"}, or 
 [Quay.io](https://quay.io/){:target="_blank"} are for a limited trial of the Enterprise version of Content Services that 
 goes into read-only mode after 2 days. For a longer (30-day) trial, get the Alfresco Content Services 
-[Download Trial](https://www.alfresco.com/platform/content-services-ecm/trial/download){:target="_blank"}.
+[Download Trial](https://www.hyland.com/en/resources/alfresco-ecm-download){:target="_blank"}.
 
 > **Note:** A [Quay.io](https://quay.io/) account is needed to pull the Docker images that are needed for the Transform Service:
 >
@@ -196,31 +196,31 @@ The steps to install are:
 
 Example installation based on a downloaded `image-exiftool-12.25.tgz` file:
 
-Create a new directory named `exiftool` under your Alfresco installation, such as `/usr/local/acs72` directory.
+Create a new directory named `exiftool` under your Alfresco installation, such as `/usr/local/acs74` directory.
 
 ```bash
-$ sudo mkdir /usr/local/acs72/exiftool
+$ sudo mkdir /usr/local/acs74/exiftool
 ```
 
 Extract `~/Downloads/image-exiftool-12.25.tgz` and copy the contents of `~/Downloads/Image-ExifTool-12.25` into the 
-`/usr/local/acs72/exiftool/` directory:
+`/usr/local/acs74/exiftool/` directory:
 
 ```bash
 $ sudo tar -xvf ~/Downloads/image-exiftool-12.25.tgz --directory ~/Downloads/
-$ sudo cp -R ~/Downloads/Image-ExifTool-12.25/* /usr/local/acs72/exiftool/
+$ sudo cp -R ~/Downloads/Image-ExifTool-12.25/* /usr/local/acs74/exiftool/
 ```
 
 Export the `exiftool` directory to the `PATH` variable:
 
 ```bash
-export PATH=$PATH:/usr/local/acs72/exiftool
+export PATH=$PATH:/usr/local/acs74/exiftool
 ```
 
-Update the file permissions for `/usr/local/acs72/exiftool` directory:
+Update the file permissions for `/usr/local/acs74/exiftool` directory:
 
 ```bash
-$ sudo chgrp -R Alfresco /usr/local/acs72/exiftool
-$ sudo chmod -R 755 /usr/local/acs72/exiftool
+$ sudo chgrp -R Alfresco /usr/local/acs74/exiftool
+$ sudo chmod -R 755 /usr/local/acs74/exiftool
 ```
 
 ## Install with Helm charts
@@ -249,7 +249,7 @@ Here is a summary of the steps required:
 See the [Alfresco/acs-deployment](https://github.com/Alfresco/acs-deployment/){:target="_blank"} GitHub project 
 documentation for the prerequisites and detailed setup:
 
-* [Deploying with Helm charts on AWS using EKS](https://github.com/Alfresco/acs-deployment/blob/support/SP/4.N/docs/helm-deployment-aws_eks.md){:target="_blank"}
+* [Deploying with Helm charts on AWS using EKS](https://github.com/Alfresco/acs-deployment/blob/master/docs/helm/eks-deployment.md){:target="_blank"}
 
 ## Install with Docker Compose
 Use this information to quickly start up Content Services (including Transform Service) using Docker Compose. Due to the 
@@ -261,15 +261,9 @@ from the left column that corresponds to the required Content Services version y
 
    > **Note:** Check the prerequisites for your operating system, both for Docker and Docker Compose, using the links provided.
 
-1. Clone the project locally, and then change directory to the project folder:
+1. Download [one of the Docker Compose files](https://github.com/Alfresco/acs-deployment/tree/master/docker-compose/){:target="_blank"} from the `acs-deployment` repository, and navigate to the folder where the file is saved.
 
-   ```bash
-    git clone --branch x.y.z https://github.com/Alfresco/acs-deployment.git
-    cd acs-deployment/docker-compose
-    ```
-
-    > **Note:** Replace the version number `x.y.z` with the tag that matches the Content Services version you want to 
-    > deploy. For example, if you want Content Services 7.3.0, then select tag `5.3.0`.
+    Alternatively, if you want to contribute to the open source code, you can use one of the options provided in the **Code** dropdown of the [main repository page](https://github.com/Alfresco/acs-deployment/tree/master){:target="_blank"}. These options are **Clone** the repository, **Open with GitHub Desktop**, or **Download ZIP** to save a copy of the code. For example, if you want to see the latest release code for Content Services 23.x, then select tag `v8.0.0`.
 
     > **Note:** Make sure that exposed ports are open on your host computer. Check the `docker-compose.yml` file to 
     > determine the exposed ports - refer to the `host:container` port definitions. You'll see they include 5432, 8080, 
@@ -283,13 +277,13 @@ from the left column that corresponds to the required Content Services version y
 
     You'll need your [Quay.io](https://quay.io){:target="_blank"} account credentials to access the Docker images. If 
     you don't already have these credentials, contact [Alfresco Support](https://support.alfresco.com/){:target="_blank"}.
-   
+
 3. (OPTIONAL) Make sure the Docker Compose file uses the following versions of Transform Router, Transform Core AIO T-Engine, and Shared file store:
 
    ```yaml
    transform-router:
      mem_limit: 512m
-     image: quay.io/alfresco/alfresco-transform-router:2.0.0
+     image: quay.io/alfresco/alfresco-transform-router:4.1.0
      environment:
        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
        ACTIVEMQ_URL: "nio://activemq:61616"
@@ -301,7 +295,7 @@ from the left column that corresponds to the required Content Services version y
        - activemq
 
    transform-core-aio:
-     image: alfresco/alfresco-transform-core-aio:3.0.0
+     image: alfresco/alfresco-transform-core-aio:5.1.0
      mem_limit: 1536m
      environment:
        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
@@ -313,7 +307,7 @@ from the left column that corresponds to the required Content Services version y
        - activemq
    
    shared-file-store:
-     image: quay.io/alfresco/alfresco-shared-file-store:2.0.0
+     image: quay.io/alfresco/alfresco-shared-file-store:4.1.0
      mem_limit: 512m
      environment:
        JAVA_OPTS: " -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80"
@@ -340,13 +334,14 @@ from the left column that corresponds to the required Content Services version y
     Creating docker-compose-shared-file-store-1 ... done
     Creating docker-compose-sync-service-1      ... done
     Creating docker-compose-alfresco-1          ... done
+    Creating docker-compose-control-center-1    ... done
     Creating docker-compose-share-1             ... done
     Creating docker-compose-postgres-1          ... done
     Creating docker-compose-activemq-1          ... done
     Creating docker-compose-proxy-1              ... done
     Creating docker-compose-transform-router-1   ... done
     Creating docker-compose-transform-core-aio-1 ... done
-    Attaching to docker-compose-digital-workspace-1, docker-compose-shared-file-store-1, docker-compose-alfresco-1,
+    Attaching to docker-compose-digital-workspace-1, docker-compose-shared-file-store-1, docker-compose-alfresco-1, ...
     ```
 
     As an alternative, you can also start the containers in the background by running `docker-compose up -d`.
@@ -408,20 +403,22 @@ Use this information to verify that the system started correctly, and to clean u
 
         ```bash
         Container                             Repository                                     Tag                        Image Id         Size
-        ---------------------------------------------------------------------------------------------------------------------------------------
-        docker-compose-activemq-1             alfresco/alfresco-activemq                     5.17.1-jre11-rockylinux8   0cd1a9629a85     632MB
-        docker-compose-alfresco-1             quay.io/alfresco/alfresco-content-repository   7.3.0                      13fbb0267e48     1.3GB
-        docker-compose-control-center-1       quay.io/alfresco/alfresco-admin-app            7.6.0                      f64bca8ae242     44.6MB
-        docker-compose-digital-workspace-1    quay.io/alfresco/alfresco-digital-workspace    3.1.0                      5842196a4fb4     576MB
-        docker-compose-postgres-1             postgres                                       14.4                       e09e90144645     376MB
-        docker-compose-proxy-1                alfresco/alfresco-acs-nginx                    3.4.2                      f9c4519b7920     23.5MB
-        docker-compose-share-1                quay.io/alfresco/alfresco-share                7.3.0                      e77a380ab703     720MB
-        docker-compose-shared-file-store-1    quay.io/alfresco/alfresco-shared-file-store    2.0.0                      32d64489f2b6     607MB
-        docker-compose-solr6-1                alfresco/alfresco-search-services              2.0.5                      936f6335d2e5     920MB
-        docker-compose-sync-service-1         quay.io/alfresco/service-sync                  3.8.0                      0418d131e179     629MB
-        docker-compose-transform-core-aio-1   alfresco/alfresco-transform-core-aio           3.0.0                      c97305a9232a     1.69GB
-        docker-compose-transform-router-1     quay.io/alfresco/alfresco-transform-router     2.0.0                      c084269f2c47     597MB       
+        --------------------------------------------------------------------------------------------------------------------------------------- 
+        docker-compose-activemq-1             alfresco/alfresco-activemq                     5.18-jre17-rockylinux8   8d025606b35f        686MB
+        docker-compose-alfresco-1             quay.io/alfresco/alfresco-content-repository   23.2.1                   c50a76324708        1.15GB
+        docker-compose-control-center-1       quay.io/alfresco/alfresco-control-center       8.4.1                    9f7f1ce0ba60        43.2MB
+        docker-compose-digital-workspace-1    quay.io/alfresco/alfresco-digital-workspace    4.4.1                    bb6bda03b42e        47.5MB
+        docker-compose-postgres-1             postgres                                       14.4                     fb7289787ade        355MB
+        docker-compose-proxy-1                alfresco/alfresco-acs-nginx                    3.4.2                    f9c4519b7920        23.4MB
+        docker-compose-share-1                quay.io/alfresco/alfresco-share                23.2.1                   f4063f4d7a62        715MB
+        docker-compose-shared-file-store-1    quay.io/alfresco/alfresco-shared-file-store    4.1.0                    ac8ce4ddeeb7        567MB
+        docker-compose-solr6-1                quay.io/alfresco/search-services               2.0.8.2                  be4b827d934a        835MB
+        docker-compose-sync-service-1         quay.io/alfresco/service-sync                  4.0.1                    cb8e65443e11        719MB
+        docker-compose-transform-core-aio-1   alfresco/alfresco-transform-core-aio           5.1.0                    448b02b47f7d        1.67GB
+        docker-compose-transform-router-1     quay.io/alfresco/alfresco-transform-router     4.1.0                    bcdf3867f26c        598MB
         ```
+
+        > **Note:** The Docker images listed above are based on an updated Docker Compose file, using the code snippet from step 3 in the initial Docker Compose instructions.
 
     2. List the running containers:
 
@@ -471,6 +468,7 @@ Use this information to verify that the system started correctly, and to clean u
     Stopping docker-compose-shared-file-store-1  ... done
     Stopping docker-compose-postgres-1           ... done
     Stopping docker-compose-activemq-1           ... done
+    Stopping docker-compose-control-center-1     ... done
     Stopping docker-compose-share-1              ... done
     Stopping docker-compose-solr6-1              ... done
     Stopping docker-compose-alfresco-1           ... done
@@ -536,19 +534,18 @@ metadata extraction capabilities. Ensure that you've installed the [prerequisite
 before continuing.
 
 1. Browse to [Hyland Community](https://community.hyland.com/){:target="_blank"} and download 
-   `alfresco-transform-service-distribution-2.0.x.zip`.
+   `alfresco-transform-service-distribution-4.1.x.zip`.
 
 2. Extract the zip file into a system directory; for example, `<installLocation>/`.
 
     In this directory you'll see the following content including three runnable JAR files:
 
-    * `alfresco-shared-file-store-controller-2.0.x.jar`
-    * `alfresco-transform-core-aio-boot-3.0.x.jar`
-    * `alfresco-transform-router-2.0.x.jar`
+    * `alfresco-shared-file-store-controller-4.1.x.jar`
+    * `alfresco-transform-core-aio-boot-5.1.x.jar`
+    * `alfresco-transform-router-4.1.x.jar`
     * `README.md`
-    * IPTC Content Model (needs to be bootstrapped into Alfresco Content Services for IPTC Metadata extraction to work, 
-      unless you are using Alfresco Content Services version 7.1.0+. See [Supported platforms]({% link transform-service/latest/support/index.md %}) 
-      for more information.
+    * IPTC Content Model
+      * Needs to be bootstrapped into Alfresco Content Services for IPTC Metadata extraction to work, unless you are using Alfresco Content Services version 7.1.0+. See [Supported platforms]({% link transform-service/latest/support/index.md %}) for more information.
 
 3. Start Active MQ.
 
@@ -570,8 +567,9 @@ before continuing.
 4. Start the Shared File Store (SFS) controller:
 
     ```java
-    java -DfileStorePath=/path/to/your/AlfrescoFileStore -Dscheduler.contract.path=/path/to/tempdir/scheduler.json
-     -jar alfresco-shared-file-store-controller-2.0.x.jar
+    java -DfileStorePath="/path/to/your/AlfrescoFileStore" \
+         -Dscheduler.contract.path="/path/to/tempdir/scheduler.json" \
+         -jar alfresco-shared-file-store-controller-4.1.x.jar
     ```
 
     Check the output to ensure that it starts successfully.
@@ -587,14 +585,14 @@ before continuing.
 5. Start the all-in-one Transform Core Engine Spring Boot app:
 
     ```java
-    java -DPDFRENDERER_EXE="<alfresco-pdf-renderer_installation_dir>/alfresco-pdf-renderer"
-       -DLIBREOFFICE_HOME="<libreoffice_installation_dir>"
-       -DIMAGEMAGICK_ROOT="<imagemagick_installation_dir>"
-       -DIMAGEMAGICK_DYN="<imagemagick_installation_dir>/lib"
-       -DIMAGEMAGICK_EXE="<imagemagick_installation_dir>/bin/convert"
-       -DACTIVEMQ_URL=failover:(tcp://server:61616)?timeout=3000
-       -DFILE_STORE_URL=http://localhost:8099/alfresco/api/-default-/private/sfs/versions/1/file
-       -jar alfresco-transform-core-aio-boot-3.0.x.jar
+    java -DPDFRENDERER_EXE="<alfresco-pdf-renderer_installation_dir>/alfresco-pdf-renderer" \
+         -DLIBREOFFICE_HOME="<libreoffice_installation_dir>" \
+         -DIMAGEMAGICK_ROOT="<imagemagick_installation_dir>" \
+         -DIMAGEMAGICK_DYN="<imagemagick_installation_dir>/lib" \
+         -DIMAGEMAGICK_EXE="<imagemagick_installation_dir>/bin/convert" \
+         -DACTIVEMQ_URL="failover:(tcp://<server>:61616)?timeout=3000" \
+         -DFILE_STORE_URL="http://<server>:8099/alfresco/api/-default-/private/sfs/versions/1/file" \
+         -jar alfresco-transform-core-aio-boot-5.1.x.jar
     ```
 
     > **Note:** LibreOffice, ImageMagick and Alfresco PDF Renderer binaries needs to be installed on the server where the all-in-one core T-Engine is setup. See the [Prerequisites](#prereq-non-containerized-deploy) for more details. You may need to change the paths depending on your operating system.
@@ -602,15 +600,16 @@ before continuing.
     For example:
 
     ```java
-    java -DPDFRENDERER_EXE="/usr/local/acs72/alfresco-pdf-renderer/alfresco-pdf-renderer" \
-       -DLIBREOFFICE_HOME="/usr/local/acs72/libreoffice" \
-       -DIMAGEMAGICK_ROOT="/usr/local/acs72/imagemagick" \
-       -DIMAGEMAGICK_DYN="/usr/local/acs72/imagemagick" \
-       -DIMAGEMAGICK_EXE="/usr/local/acs72/imagemagick/convert" \
-       -DIMAGEMAGICK_CODERS="/usr/local/acs72/imagemagick/modules-Q16HDRI/coders" \
-       -DIMAGEMAGICK_CONFIG="/usr/local/acs72/imagemagick/config-Q16HDRI" \
-       -DACTIVEMQ_URL=failover:(tcp://localhost:61616)?timeout=3000 \
-       -jar /usr/local/acs72/bin/alfresco-transform-core-aio-boot-3.0.0.jar
+    java -DPDFRENDERER_EXE="/usr/local/acs74/alfresco-pdf-renderer/alfresco-pdf-renderer" \
+         -DLIBREOFFICE_HOME="/usr/local/acs74/libreoffice" \
+         -DIMAGEMAGICK_ROOT="/usr/local/acs74/imagemagick" \
+         -DIMAGEMAGICK_DYN="/usr/local/acs74/imagemagick" \
+         -DIMAGEMAGICK_EXE="/usr/local/acs74/imagemagick/convert" \
+         -DIMAGEMAGICK_CODERS="/usr/local/acs74/imagemagick/modules-Q16HDRI/coders" \
+         -DIMAGEMAGICK_CONFIG="/usr/local/acs74/imagemagick/config-Q16HDRI" \
+         -DACTIVEMQ_URL="failover:(tcp://localhost:61616)?timeout=3000" \
+         -DFILE_STORE_URL="http://localhost:8099/alfresco/api/-default-/private/sfs/versions/1/file" \
+         -jar /usr/local/acs74/bin/alfresco-transform-core-aio-boot-5.1.0.jar
     ```
 
     Check the output to ensure that it starts successfully.
@@ -623,11 +622,11 @@ before continuing.
 6. Start the Transform Router Spring Boot app:
 
     ```java
-    java -DCORE_AIO_URL=http://localhost:8090
-     -DCORE_AIO_QUEUE=org.alfresco.transform.engine.aio.acs
-     -DACTIVEMQ_URL=failover:(tcp://server:61616)?timeout=3000
-     -DFILE_STORE_URL=http://localhost:8099/alfresco/api/-default-/private/sfs/versions/1/file
-     -jar alfresco-transform-router-2.0.x.jar
+    java -DCORE_AIO_QUEUE="org.alfresco.transform.engine.aio.acs" \
+         -DCORE_AIO_URL="http://localhost:8090" \
+         -DACTIVEMQ_URL="failover:(tcp://localhost:61616)?timeout=3000" \
+         -DFILE_STORE_URL="http://localhost:8099/alfresco/api/-default-/private/sfs/versions/1/file" \
+         -jar alfresco-transform-router-4.1.x.jar
     ```
 
     Check the output to ensure that it starts successfully.

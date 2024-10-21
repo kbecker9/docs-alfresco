@@ -9,8 +9,8 @@ There are a number of processes and procedures for maintaining and administering
 The Exact Term search feature that allows searching using the equals operator `=`, is disabled by default to save index space.
 It's possible to enable it for specific properties and property types using the `/alfresco/search/elasticsearch/config/exactTermSearch.properties` configuration file located in the Alfresco Repository.
 
-|Property|Description|
-|--------|-----------|
+| Property | Description |
+| -------- | ----------- |
 | alfresco.cross.locale.datatype.0 | A new cross locale field is added for any property of this data-type to enable exact term search. For example, {http://www.alfresco.org/model/dictionary/1.0}text. The Exact Term search is disabled by default. |
 | alfresco.cross.locale.property.0 | A new cross locale field is added for the property to enable exact term search. For example, {http://www.alfresco.org/model/content/1.0}content. The Exact Term search is disabled by default. |
 
@@ -25,7 +25,7 @@ alfresco.cross.locale.property.0={http://www.alfresco.org/model/content/1.0}cont
 
 To overwrite this configuration when using Docker compose you can mount this file as an external volume. The following sample describes a local configuration to be applied to the Elasticsearch Search Subsystem when using Docker compose:
 
-```docker
+```yml
 services:
   alfresco:
     volumes:
@@ -34,13 +34,74 @@ services:
 
 > **Note:** Once complete you must perform a re-index. It is recommended you enable the exact term feature before you start creating an index.
 
+You can also add these environment variables directly to the Alfresco `JAVA_OPTS` section of your Docker compose file.
+
+```yml
+services:
+    alfresco:
+        image: quay.io/alfresco/alfresco-content-repository:23.1.0
+        mem_limit: 1900m
+        environment:
+            JAVA_TOOL_OPTIONS: -Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede
+            JAVA_OPTS: -Ddb.driver=org.postgresql.Driver
+                ...
+                -alfresco.cross.locale.datatype.0={http://www.alfresco.org/model/dictionary/1.0}text
+                -alfresco.cross.locale.datatype.1={http://www.alfresco.org/model/dictionary/1.0}content
+                -alfresco.cross.locale.datatype.2={http://www.alfresco.org/model/dictionary/1.0}mltext
+                -alfresco.cross.locale.property.0={http://www.alfresco.org/model/content/1.0}content
+                ...
+```
+
+### Mapping
+
+When you index a document that contains a new field, Search Enterprise adds the field dynamically to the document, or to the inner objects within a document. Inner objects inherit the dynamic setting from their parent object or from the mapping type. A dynamic parameter controls whether new fields are added dynamically. The default value is `true` and should be disabled to avoid a large index, unless a large index is necessary. This can be done when you create the index, using the following command:
+
+```bash
+curl -XPUT '<Search Enterprise URL>:<port>/<index name>?pretty' -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+        "dynamic": "false"
+    }
+}'
+```
+
+### Sharding
+
+A shard is a small chunk of memory where indexed data is stored. Before you index Search Enterprise you can configure how many shards and replicas you want to use. How you configure the shards will depend on your intended data volume and the size of each shard. Here's the command to use:
+
+```bash
+curl -XPUT '<Search Enterprise URL>:<port>/<index name>?pretty' -H 'Content-Type: application/json' -d'
+{
+  "settings" :{
+    "number_of_shards":<expected number of shards>,
+    "number_of_replicas":<0 for no replica, 1 for 1 replica of each shards and so on>
+  }
+}
+```
+
+### Near real-time search
+
+Per-segment searching has decreased the delay between indexing a document and when it is able to be visible to your search queries. In Search Enterprise, the lightweight process of writing and opening a new segment is called a refresh. By default, each shard is automatically refreshed every second. Using parameters you can increase the refresh rate to increase the speed of the indexing process, or you can disable it completely.
+
+To speed up the process:
+
+```bash
+curl -XPUT "<Search Enterprise URL>:<port>/<index name>/_settings" -H 'Content-Type: application/json' -d '{ "index" : { "refresh_interval" : "60s"  }}'
+```
+
+To disable the refresh rate:
+
+```bash
+curl -XPUT "<Search Enterprise URL>:<port>/<index name>/_settings" -H 'Content-Type: application/json' -d '{ "index" : { "refresh_interval" : "-1"  }}'
+```
+
 ## Alfresco Elasticsearch connector
 
 **Indexing** is provided by a Spring boot application called the Elasticsearch connector. This application contains two main components that build and maintain the index in Elasticsearch.
 
 * *Live Indexing*: Metadata, and Content and Permissions from Alfresco Repository are consumed using ActiveMQ messages so they can be indexed in the Elasticsearch server. The information created and updated in the Alfresco Repository is not immediately available in Elasticsearch, because it takes time to process the messages coming from the Alfresco Repository. The previous [Eventual consistency]({% link search-services/latest/install/index.md %}#eventual-consistency) approach, based on transactions and used for Solr deployments, has been replaced by this new approach based on ActiveMQ messages.
 
-* *Re-indexing*: Indexing the information of a pre-populated Alfresco Repository or catching up with Alfresco Repositories that have missed some ActiveMQ messages is provided by the re-indexing component. Metadata and Permissions from the Alfresco Repository is retrieved using a direct JDBC connection to the Alfresco Database. **Note:** Only PostgreSQL is supported. The re-indexing application also generates content indexing messages in ActiveMQ in order to get the content indexed. It may take some time to process all these requests after the re-indexing application has finished.
+* *Re-indexing*: Indexing the information of a pre-populated Alfresco Repository or catching up with Alfresco Repositories that have missed some ActiveMQ messages is provided by the re-indexing component. Metadata and Permissions from the Alfresco Repository is retrieved using a direct JDBC connection to the Alfresco Database. The re-indexing application also generates content indexing messages in ActiveMQ in order to get the content indexed. It may take some time to process all these requests after the re-indexing application has finished.
 
 ### New Repository
 
@@ -51,7 +112,7 @@ When creating a new Alfresco Repository you must use the Elasticsearch connector
 3. Run the re-indexing app from the command line replacing the connection details as appropriate:
 
 ```java
-$ java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+$ java -jar alfresco-elasticsearch-reindexing-4.0.0-app.jar \
 --alfresco.reindex.jobName=reindexByIds \
 --spring.elasticsearch.rest.uris=http://localhost:9200 \
 --spring.datasource.url=jdbc:postgresql://localhost:5432/alfresco \
@@ -81,7 +142,7 @@ When using a pre-populated Alfresco Repository, use the Elasticsearch connector 
 4. Run the re-indexing app and replace the connection details as appropriate:
 
 ```java
-$ java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+$ java -jar alfresco-elasticsearch-reindexing-4.0.0-app.jar \
 --alfresco.reindex.jobName=reindexByIds \
 --spring.elasticsearch.rest.uris=http://localhost:9200 \
 --spring.datasource.url=jdbc:postgresql://localhost:5432/alfresco \
@@ -114,7 +175,7 @@ Over time some data may not be indexed correctly. This can be caused by prolonge
 The following sample re-indexes all the nodes in the Alfresco Repository which have an `ALF_NODE.id` value between `1` and `10000`.
 
 ```java
-java -jar target/alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+java -jar target/alfresco-elasticsearch-reindexing-4.0.0-app.jar \
   --alfresco.reindex.jobName=reindexByIds \
   --alfresco.reindex.pagesize=100 \
   --alfresco.reindex.batchSize=100  \
@@ -128,7 +189,7 @@ java -jar target/alfresco-elasticsearch-reindexing-3.2.0-app.jar \
 The following sample re-indexes all the nodes in the Alfresco Repository which have a value for `ALF_TRANSACTION.commit_time_ms` between `202001010000` and `202104180000`. Date time values are written in the format `yyyyMMddHHmm`.
 
 ```java
- java -jar target/alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+ java -jar target/alfresco-elasticsearch-reindexing-4.0.0-app.jar \
   --alfresco.reindex.jobName=reindexByDate \
   --alfresco.reindex.pagesize=100 \
   --alfresco.reindex.batchSize=100  \
@@ -313,25 +374,30 @@ Both strategies split the specified range into multiple ranges depending on the 
 _Manager_:
 
 ```shell
-java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+java -jar alfresco-elasticsearch-reindexing-4.0.1-app.jar \
   --alfresco.reindex.jobName=reindexByIds \
   --alfresco.reindex.partitioning.type=manager \
   --alfresco.reindex.pagesize=100 \
   --alfresco.reindex.batchSize=100  \
   --alfresco.reindex.fromId=0 \
   --alfresco.reindex.toId=10000 \
-  --spring.batch.datasource.url=jdbc:postgresql://localhost:5432/alfresco \
-  --spring.batch.datasource.username=springBatchUser \
-  --spring.batch.datasource.password=****** \
+  --spring.batch.datasource.url=jdbc:postgresql://<IP address of host>:<port number>/alfresco \
+  --spring.batch.datasource.username=alfresco \
+  --spring.batch.datasource.password=alfresco \
   --spring.batch.datasource.driver-class-name=org.postgresql.Driver \
   --spring.batch.drop.script=classpath:/org/springframework/batch/core/schema-drop-postgresql.sql \
   --spring.batch.schema.script=classpath:/org/springframework/batch/core/schema-postgresql.sql
+  --spring.elasticsearch.rest.uris=http://<IP address of host>:<port number> 
+  --spring.datasource.url=jdbc:postgresql://<IP address of host>:<port number>/alfresco 
+  --spring.datasource.username=alfresco 
+  --spring.datasource.password=alfresco 
+  --spring.activemq.broker-url=tcp://localhost:<port number>
 ```
 
 _Worker_:
 
 ```shell
-java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+java -jar alfresco-elasticsearch-reindexing-4.0.0-app.jar \
   --alfresco.reindex.partitioning.type=worker \
   --alfresco.reindex.pagesize=100 \
   --alfresco.reindex.batchSize=100 \
@@ -357,7 +423,7 @@ When using remote partitioning you are required to use a shared database that is
 When using a different database you need to add to the Java classpath and to the right connection driver. The Re-indexing service is a Spring boot application which means you can't add the JAR to the classpath, but instead you need to use a different command, for example:
 
 ```shell
- java -cp alfresco-elasticsearch-reindexing-3.2.0-app.jar:mysql-connector-java-8.0.25.jar
+ java -cp alfresco-elasticsearch-reindexing-4.0.0-app.jar:mysql-connector-java-8.0.25.jar
    -Dloader.main=org.alfresco.reindexing.ReindexingApp org.springframework.boot.loader.PropertiesLauncher
    --alfresco.reindex.jobName=reindexByIds
    --alfresco.reindex.partitioning.type=manager
@@ -373,6 +439,8 @@ When using a different database you need to add to the Java classpath and to the
    --spring.batch.drop.script=classpath:/org/springframework/batch/core/schema-drop-mysql.sql
    --spring.batch.schema.script=classpath:/org/springframework/batch/core/schema-mysql.sql
 ```
+
+From version 3.3.x you can use a different database, for more see [Support for different databases]({% link search-enterprise/latest/config/index.md %}#support-for-different-databases).
 
 #### Failures handling
 
@@ -403,7 +471,7 @@ The Re-indexing application may be used to index only metadata. You can also exc
 To apply this configuration, set the parameter `alfresco.reindex.contentIndexingEnabled` to `false`:
 
 ```shell
-java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+java -jar alfresco-elasticsearch-reindexing-4.0.0-app.jar \
     --alfresco.reindex.contentIndexingEnabled=false
 ```
 
@@ -412,7 +480,7 @@ java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
 By default, the re-indexing PATH property is disabled. To enable this feature, set the parameter `alfresco.reindex.pathIndexingEnabled` to `true`.
 
 ```shell
-java -jar alfresco-elasticsearch-reindexing-3.2.0-app.jar \
+java -jar alfresco-elasticsearch-reindexing-4.0.0-app.jar \
     --alfresco.reindex.pathIndexingEnabled=true
 ```
 
@@ -428,8 +496,227 @@ The re-indexing metadata process also indexes permissions associated with the do
 
 The main use case to re-index only content or path is a fully metadata indexed repository that needs to update / complete the content or path.
 
-## Recommendations for large re-indexing processes
+## Bulk metadata indexing
 
-When indexing large repositories from scratch, the metadata indexing rate will be higher than the content indexing rate. This will increase the number of messages pending in the property `acs-repo-transform-request` from the ActiveMQ queue. However, since [Basic ActiveMQ configuration](https://activemq.apache.org/amq-message-store){:target="_blank"} is prepared to handle [millions of Queue Messages](https://activemq.apache.org/how-do-i-configure-activemq-to-hold-100s-of-millions-of-queue-messages){:target="_blank"} per queue, this will not be an issue for the platform.
+You can customize Search Enterprise by having the index ready with just the metadata of uploaded files or with the content of the files as well. If you have the content of your files indexed there are time and cost implications you must consider and it is only recommended when necessary.
+This example describes how to set up Search Enterprise to show the speed achievable when processing one billion files. Amazon Web Services have been used as the host but your setup will be specific to your requirements.
 
-If you're using a custom ActiveMQ configuration ensure ActiveMQ is not using a transient message store and is using paging cache.
+The configuration used in this example:
+
+**Search Enterprise Data Node**
+
+* AWS Elasticsearch `7.10` with Availability Zone: `1-AZ`.
+* Number of Data Nodes: `3`.
+* Instance Type: `r6g.2xlarge.search`.
+* Storage type: EBS.
+* EBS volume type: Provisioned IOPS (SSD).
+* EBS volume size: `1000GB` per node.
+* Fielddata cache allocation: `20`.
+* Max clause count: `1024`.
+
+**Indexing Instance**
+
+* Amazon EC2 Indexing instance to run `alfresco-elasticsearch-connector-distribution-3.2.1`.
+* Indexing Instance type: `t2.2xlarge` (8vCPUs, `32GB` RAM).
+* Number of Amazon EC2 Instances for Indexing: `3`.
+* Number of threads running on instance 1 and 2 is `7` each with `6` threads on instance 3. Total threads running in parallel is `20`.
+* Maximum Heap allocated to each thread is `4GB` (`-Xmx4G`).
+
+**Search Enterprise Master Node**
+
+* Number of Master Nodes: `3`.
+* Master Node instance type: `m5.large.search`.
+* Master node is added for resilience, and can be avoided without having significant impact.
+
+**Search Enterprise Settings**
+
+* Number of Primary shards: `32`.
+* Number of Replica shards: `0`.
+* Refresh time: Disabled.
+* Translog flush threshold: `2GB`
+
+**Other Components**
+
+* Active MQ: `mq.m4.large`.
+* RDS is used as the Database with `db.r5.2xlarge` running PostgreSQL.
+* Amazon EC2 Instance running Content Services and the Transform Service: `m5a.xlarge`
+* Content Services: `7.2.0`.
+
+The deployment architecture of the system:
+
+![architecture]({% link search-enterprise/images/database-configuration.png %})
+
+### Configure Search Enterprise
+
+Amazon Web Services recommend each shard should be not more than `50GB`. For this example of one billion files the estimated total size of metadata to be indexed is `1.3TB`. The shard size here can be set to `40GB` which equals 32 shards.
+
+On the same VPC set the number of shards:
+
+```curl
+curl -XPUT 'https://<Elasticsearch DNS>:443/alfresco?pretty' -H 'Content-Type: application/json' -d'
+{
+  "settings" :{
+        "number_of_shards":32,
+        "number_of_replicas":0
+  }
+}'
+```
+
+You can set other critical parameters such as the refresh interval and the translog flush threshold using curl. The refresh interval is the time in which indexed data is searchable and should be disabled. This is done by setting it to `-1` or by setting it to a higher value during indexing to avoid the unnecessary usage of resources. The translog flush threshold is set to a higher size, for example `2GB`, to avoid it periodically flushing during the indexing process.
+
+To set the refresh interval to `-1` to disable it:
+
+```curl
+curl -XPUT "https://<Elasticsearch DNS>:443/alfresco/_settings" -H 'Content-Type: application/json' -d '{ "index" : { "refresh_interval" : "-1"  }}'
+```
+
+To set the translog flush threshold to `2GB`:
+
+```curl
+curl -XPUT "https://<Elasticsearch DNS>:443/alfresco/_settings?pretty" -H 'Content-Type: application/json' -d '{"index":{"translog.flush_threshold_size" : "2GB"}}'
+```
+
+To verify the settings:
+
+```curl
+curl -XGET "https://<Elasticsearch DNS>:443/alfresco/_settings?pretty" -H 'Content-Type: application/json' -d '{ "index" : { "refresh_interval" }}'
+```
+
+To setup the Re-Indexing Instance:
+
+1. Deploy three Amazon EC2 instances in the same VPC as all the other services.
+
+2. Attach the Amazon EC2 instances to a security group that allows all incoming traffic from the other services.
+
+3. Install Java 17 on all three instances.
+
+4. Copy `alfresco-elasticsearch-connector-distribution-3.2.1` to the three Amazon EC2 instances.
+
+   Run `7` threads on each of the two instances and `6` on the third instance to achieve a total of `20` thread count.
+
+5. In a command prompt on the VPC `cd` to where `alfresco-elasticsearch-reindexing-3.1.1-app.jar` is located.
+
+6. Run the following Indexing command with your specific configuration, where:
+
+    * `server.port` - a unique port number to run the required number of threads needed for an instance. For example, to run 7 threads from instance one, you must copy the code 7 times and provide a unique port in each of the 7 sets of commands.
+    * `alfresco.reindex.fromId` and `alfresco.reindex.toId` - a unique `nodeID` for each thread. You can equally distribute the total file count among the threads. In this example, 1B among 20 threads with each thread receiving 50 million each. For example:
+        * For Thread 1: `alfresco.reindex.fromId=0` and `alfresco.reindex.toId=50000000`
+        * For Thread 2: `alfresco.reindex.fromId=50000001` and `alfresco.reindex.toId=100000000`
+        * For Thread 3: `alfresco.reindex.fromId=100000001` and `alfresco.reindex.toId=150000000`
+        * For Thread 20: `alfresco.reindex.fromId=950000001` and `alfresco.reindex.toId=1000000000`
+
+Indexing Command:
+
+```java
+nohup java -Xmx4G -jar alfresco-elasticsearch-reindexing-3.2.1-app.jar \
+--server.port=<unique port> \
+--alfresco.reindex.jobName=reindexByIds \
+--spring.elasticsearch.rest.uris=https://<Elasticsearch DNS>:443 \
+--spring.datasource.url=jdbc:postgresql://<DB Writer URL>:5432/alfresco \
+--spring.datasource.username=**** \
+--spring.datasource.password=**** \
+--alfresco.accepted-content-media-types-cache.enabled=false \
+--spring.activemq.broker-url=failover:\(ssl://<Broker 1>:61617,ssl://<Broker 2>:61617\) \
+--spring.activemq.user=alfresco \
+--spring.activemq.password=***** \
+--alfresco.reindex.fromId=0 \
+--alfresco.reindex.toId=50000000 \
+--alfresco.reindex.multithreadedStepEnabled=true \
+--alfresco.reindex.concurrentProcessors=30 \
+--alfresco.reindex.metadataIndexingEnabled=true \
+--alfresco.reindex.contentIndexingEnabled=false \
+--alfresco.reindex.pathIndexingEnabled=true \
+--alfresco.reindex.pagesize=10000 \
+--alfresco.reindex.batchSize=1000  &
+Indexing Speed
+```
+
+The table summarizes different indexing capabilities obtained with different data volumes but with identical infrastructure and configuration as outlined above.
+
+![statistics]({% link search-enterprise/images/database-statistics.png %})
+
+## Search Enterprise Healthcheck
+
+The Healthcheck allows you to check the status of the Search Enterprise index by sampling a configurable number of nodes. It does this by comparing the latest update for these nodes with the latest update for the equivalent database record. If these do not match, within a configurable tolerance, an error is reported. If you have nodes that have failed to index the Healthcheck provides a way of reindexing them.
+The Healthcheck can be run nightly to ensure that any updates in the last 24 hour period are up to date. Using the Healthcheck gives you confidence that all your repository content is searchable.
+
+### Configure Healthcheck in the Repository
+
+The Alfresco Repository includes configuration properties for the Healthcheck. The property values are included in the `alfresco-global.properties` configuration file. To use these properties you must first activate the Search Enterprise Subsystem, for more see [Configure Subsystem in Repository]({% link search-enterprise/latest/install/index.md %}#configure-subsystem-in-repository). You can also use the [JConsole]({% link content-services/latest/config/index.md %}#configure-with-jconsole) to configure the Healthcheck.  
+
+| Property | Description |
+| -------- | ----------- |
+| elasticsearch.healthcheck.id.minRange | The minimum healthcheck database node ID. A node must have a database ID greater than or equal to the specified value that is included in the healthcheck. |
+| elasticsearch.healthcheck.id.maxRange | The maximum healthcheck database node ID. A node must have a database ID that is less than or equal to the specified value that is included in the healthcheck. |
+| elasticsearch.healthcheck.date.minRange | The minimum healthcheck database node update date. A node must have a database update date that is greater than or equal to the specified value that is included in the healthcheck. The default is `2023-01-01T23:59:00Z`. |
+| elasticsearch.healthcheck.date.maxRange | The maximum healthcheck database node update date. A node must have a database update date that is less than or equal to the specified value that is included in the healthcheck. The default is `2023-01-07T23:59:00Z`. |
+| elasticsearch.healthcheck.batchSize | The number of nodes aggregated from the database to be checked in Search Enterprise in one go. The property cannot be greater than `10000`. The default is `10000` |
+| elasticsearch.healthcheck.confidenceThresholdInMs | A threshold value in milliseconds that can be used to help you avoid false positives. It can be used in cases where the timestamp difference between the database and Search Enterprise is below the threshold. An example of this is when you are managing out of order events, or in circumstances where you have expected delays in indexing. The default is `1000`. |
+| elasticsearch.healthcheck.pollingRatio | The distance between nodes to check. For example, if you set this property  to `10`, then every 10th node within the configured range is checked. The default is `1`. |
+| elasticsearch.healthcheck.timeoutInHours | The number of hours the healthcheck is allowed to run. If the time out is exceeded, the healthcheck is stopped and only the results found until the healthcheck is stopped will be displayed. The default is `1`. |
+| elasticsearch.healthcheck.startTime | The scheduled time to automatically start the healthcheck. The default is `2030-12-30T23:59:00Z`. |
+| elasticsearch.healthcheck.intervalPeriod | The period of time the healthcheck should wait between repeated executions after the first scheduled execution. The possible values are: `Month`, `Week`, `Day`, `Hour`, `Minute`, or `Second`. The default is `Week`. |
+| elasticsearch.healthcheck.intervalCount | Sets how many periods should be waited between each scheduled execution. The default is `1`. |
+| elasticsearch.healthcheck.nodeAspectsToExclude | A comma-separated list of node aspects. Nodes with any of the aspects from the specified list will be excluded from the healthcheck. The default is `sys:hidden`. |
+
+> **Note:** You can only set one range format, either ID or Date. This means two properties for one of the range formats must always be empty.
+
+### Run Healthcheck Job
+
+Use the JConsole to run the Healthcheck.
+
+> **Note:** The MBean `Alfresco:Name=ElasticsearchHealthcheck` is exposed and allows you to manage the Healthcheck.
+
+1. Open a command prompt and `cd` to your JDK installation directory.
+
+2. Open the Java Monitoring & Management Console window by entering: `jconsole`.
+
+3. Double click the **Alfresco Content Services Java** process.
+
+    The JConsole connects to the managed bean, or MBean server hosting the subsystems.
+    For Tomcat, the Java process is labelled: `org.apache.catalina.startup.Bootstrap start`.
+
+4. Select the **MBeans** tab.
+
+    The available managed beans are displayed in the console.
+
+5. Navigate to **Alfresco** > **ElasticsearchHealthcheck** > **Operations**.
+
+6. Select one of the following:
+
+  * `triggerHealthcheckJobs()` - run Healthcheck immediately.
+  * `scheduleHealthcheckJob()` - schedule a healthcheck job, according to the `elasticsearch.healthcheck.startTime` and `elasticsearch.healthcheck.intervalPeriod` properties.
+  * `unscheduleHealthcheckJob()` - unschedule a Healthcheck job.
+
+### The Healthcheck Job results
+
+1. Open the Admin Console, for more see [Launch Admin Console]({% link content-services/latest/admin/admin-console.md %}#launch-admin-console).
+
+2. In the **Repository Services** section, click **Search Service**.
+
+3. Select the **Service Status** tab.
+
+![health]({% link search-enterprise/images/health-check.png %})
+
+The **Service Status** tab gives information on the status of the latest Healthcheck execution, latest healthcheck settings, and scheduled healthcheck settings. At the bottom of the page there is a list of the latest Healthcheck events sorted by date. You can see ranges of nodes where discrepancies in the indexing were found. This means the range starts immediately after the previous correctly indexed node and finishes immediately before the first next correctly indexed node. You can also see the number of issues found within each range.
+
+### Logging
+
+You will see a similar output if the Healthcheck has completed and some issues were found:
+
+`2023-10-11 12:57:15 2023-10-11T10:57:15,693 [] INFO  [validator.job.ElasticsearchValidationActionExecutor] [pool-14-thread-1] The Elasticsearch healthcheck job finished with 642 issues in 2 ranges.`
+
+You will see a similar output if the Healthcheck is completed without any issues being found:
+
+`2023-10-11 11:40:01 2023-10-11T09:40:01,786 [] INFO  [validator.job.ElasticsearchValidationActionExecutor] [pool-16-thread-1] The Elasticsearch healthcheck job finished with no issues.`
+
+You can obtain detailed logs for the Healthcheck that provide all ranges of information to do with any issues according to the current Healthcheck execution. You do this by activating the TRACE level for the `org.alfresco.repo.search.impl.elasticsearch.admin.validator.job.ElasticsearchValidationActionExecutor` class, for more see [Set log levels]({% link content-services/latest/admin/troubleshoot.md %}#set-log-levels).
+
+You will see a similar output:
+
+```text
+2023-10-11 12:57:15 2023-10-11T10:57:15,548 [] DEBUG [validator.job.ElasticsearchValidationActionExecutor] [pool-14-thread-1] The Elasticsearch healthcheck job started.
+2023-10-11 12:57:15 2023-10-11T10:57:15,690 [] TRACE [validator.job.ElasticsearchValidationActionExecutor] [pool-14-thread-1] The Elasticsearch healthcheck job found 638 discrepancies in date range (2023-10-11T10:50:02.124Z, 2023-10-11T10:50:28.395Z)
+2023-10-11 12:57:15 2023-10-11T10:57:15,690 [] TRACE [validator.job.ElasticsearchValidationActionExecutor] [pool-14-thread-1] The Elasticsearch healthcheck job found 4 discrepancies in date range (2023-10-11T10:56:10.164Z, 2023-10-11T10:57:15.519Z)
+2023-10-11 12:57:15 2023-10-11T10:57:15,693 [] INFO  [validator.job.ElasticsearchValidationActionExecutor] [pool-14-thread-1] The Elasticsearch healthcheck job finished with 642 issues in 2 ranges.
+```

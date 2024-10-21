@@ -87,7 +87,7 @@ We provide example inventories:
 
 ## Prerequisites
 If you're using the Enterprise edition of Content Services, then you need credentials to access the necessary artifacts from 
-[Nexus](https://artifacts.alfresco.com/nexus/){:target="_blank"}. Customers can request these through 
+[Nexus](https://nexus.alfresco.com/nexus/){:target="_blank"}. Customers can request these through 
 [Hyland Community](https://community.hyland.com/){:target="_blank"}.
 
 ### Control Node
@@ -563,7 +563,7 @@ all:
 All the `_environment` variables defined for the roles are dictionaries, and all their keys are added to the relevant 
 components start script. This allows you to define any number of environment variables. Key values are a list of 
 strings to allow for easier manipulation. When overriding the default environment variables you should make sure you're not retiring 
-important ones, so always take a look at the `https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/ROLE_NAME/defauls/main.yml` 
+important ones, so always take a look at the `https://github.com/Alfresco/alfresco-ansible-deployment/blob/master/ROLE_NAME/defaults/main.yml` 
 file first.
 
 ### External databases

@@ -42,7 +42,7 @@ Yes. As a Desktop Sync user, you can either:
 
 * Take your machine offline: You can simply ignore initial sync and shut down your machine or disconnect the network. Initial sync will resume when connection is restored.
 * Keep your machine running but discontinue initial sync: You can quit Desktop Sync and initial sync will resume when restart Desktop Sync.
-* Amend your selected content choices by clicking **Return to Content Selection**.
+* Amend your selected content choices by clicking **Return to content selection**.
 
 ### I made changes to a local file that aren't showing in Alfresco.
 
@@ -160,7 +160,7 @@ Additionally, you can use applications, such as DebugView to monitor debug outpu
 
 ### I no longer need a site. How do I remove the site and its contents from my desktop?
 
-Go to **Manage Folders...** and deselect the sites you no longer need. Click **Sync** to remove the selected files and folders from your desktop.
+Go to **Manage Folders** and deselect the sites you no longer need. Click **Sync** to remove the selected files and folders from your desktop.
 
 ### Can I use Desktop Sync while I am offline?
 
@@ -232,6 +232,10 @@ When the sync client starts up, it uses the modification time stamp from the `Al
 
 To avoid problems with conflicts on device registration, and content going out of sync during the migration process, you should first remove your account from the deprecated computer, and then setup Alfresco Desktop Sync on the new machine.
 
+### Is Desktop Sync authentication bound to a particular user login?
+
+Yes. In the Desktop Sync application, when User A's session expires and User B logs in either accidentally or intentionally, we take immediate action to maintain privacy and security by automatically removing User A's account details, as well as any synced files and folders from the local machine. Next, we display the **Select sites and folders to sync** screen for User B to choose the data they want to sync from the server to their local machine. Several notifications are shown to inform users when their session expires, their account is removed, and the app switches to the new user.
+
 {% endcapture %}
 
 {% capture mac %}
@@ -270,7 +274,7 @@ Yes. As a Desktop Sync user, you can either:
 
 * Take your computer offline: You can simply ignore initial sync and shut down your computer or disconnect the network. Initial sync will resume when connection is restored.
 * Keep your computer running but discontinue initial sync: You can quit Desktop Sync and initial sync will resume when you restart Desktop Sync.
-* Amend your selected content choices by clicking **Return to Content Selection**.
+* Amend your selected content choices by clicking **Return to content selection**.
 
 ### I made changes to a local file that aren't showing in Alfresco.
 
@@ -457,6 +461,10 @@ When the sync client starts up, it uses the modification time stamp from the `Al
 ### I have a new computer, is it possible to migrate my Alfresco sync folder to the new computer?
 
 To avoid problems with conflicts on device registration, and content going out of sync during the migration process, you should first remove your account from the deprecated computer and then setup Alfresco Desktop Sync on the new machine.
+
+### Is Desktop Sync authentication bound to a particular user login?
+
+Yes. In the Desktop Sync application, when User A's session expires and User B logs in either accidentally or intentionally, we take immediate action to maintain privacy and security by automatically removing User A's account details, as well as any synced files and folders from the local machine. Next, we display the **Select sites and folders to sync** screen for User B to choose the data they want to sync from the server to their local machine. Several notifications are shown to inform users when their session expires, their account is removed, and the app switches to the new user.
 
 {% endcapture %}
 

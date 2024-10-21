@@ -1,5 +1,5 @@
 ---
-title: Upgrading from 3.4
+title: Upgrade Alfresco Content Accelerator
 ---
 
 ## Recommendations
@@ -8,7 +8,7 @@ It is highly recommended to perform and validate upgrade steps in a pre-producti
 
 ## Upgrade Path
 
-The below instructions are validated to work on upgrading a 3.4.x version to 3.5. If upgrading from an older version of ACA, additional changes may be required.
+The below instructions are validated to work on upgrading a 3.4.x version to the latest version. If upgrading from an older version of ACA, additional changes may be required.
 
 Here is the recommended upgrade path:
 
@@ -18,7 +18,7 @@ Here is the recommended upgrade path:
 
    * Verify startup without errors in logs
 
-   **Note:** If upgrading to the latest released version is not possible, upgrade to the latest patch release. While ACA 3.4.5 will run on Alfresco 7.3, some functionality may be impacted. An upgrade to Alfresco 7.3 requires an upgrade to ACA 3.5 for full support.
+   > **Note:** If upgrading to the latest released version is not possible, upgrade to the latest patch release. While ACA 3.4.5 will run on Alfresco 7.3, some functionality may be impacted. An upgrade to Alfresco 7.3 requires an upgrade to ACA 3.5 for full support.
 
 3. Upgrade ACA infrastructure components (AMPs, WARs, Tomcat changes, property files)
 
@@ -27,7 +27,7 @@ Here is the recommended upgrade path:
 4. Upgrade ACA admin configurations (ACA admin web interface)
 
    * Verify key functionality
-   * See below for details on ACA admin configuration changes required when moving from ACA 3.4.x to 3.5.
+   * See below for details on ACA admin configuration changes required when moving from ACA 3.4.x to 3.5 and above.
 
 ## ACA Config Updates
 
@@ -45,11 +45,11 @@ Name | Label | Control Type | Notes |
 --- | --- | --- | --- |
 bpm_assignees | Users | AutoComplete | Repeating dropdown of all users.  Can be set to `allUsers` picklist or another if desired
 bpm_groupAssignee | Groups | AutoComplete | Repeating dropdown of all groups.  Optional, can be omitted if desired.
-notificationType | Notification Type | AutoComplete | Dropdown notification classification type.  **Note:** If the configuration contains a Notification Type field with `name = notification_type` (use the More button next to the field name to check) or any other value other than `notificationType`, it is recommended to follow the steps outlined below this table.
+notificationType | Notification Type | AutoComplete | Dropdown notification classification type. <br><br>**Note:** If the configuration contains a Notification Type field with `name = notification_type` (use the More button next to the field name to check) or any other value other than `notificationType`, it is recommended to follow the steps outlined below this table.
 bpm_workflowDueDate | Due Date | DateBox | Suggested due date for the notification.  Suggested to configure that the date must be today or in the future.
 bpm_comment | Comment | Textarea | Suggested to configure with WYSIWYG option on.
 
-**Note:** Only bpm_assignees and bpm_groupAssignee are required for notification to work. However, if not present in the form the ACA notification interface will still show columns for Notification Type, Due Date and Comment.  Any values missing on the form will result in a column that only contains blank values.
+> **Note:** Only `bpm_assignees` and `bpm_groupAssignee` are required for notification to work. However, if not present in the form the ACA notification interface will still show columns for Notification Type, Due Date and Comment.  Any values missing on the form will result in a column that only contains blank values.
 
 **Notification Type** - if the name of the Notification Type field is not properly configured as described above, follow these steps:
 
@@ -94,7 +94,11 @@ For each instance of the Bulk Upload action (either as a header action or Stage 
 
      * Determine if users would like saved session functionality.  Saved sessions is useful when Bulk Upload actions regularly take users a non-trivial amount of effort.  If users generally fill out Bulk Upload forms in less than 5 minutes, Saved Sessions may not be needed.
 
-3. Whether or not any updates were made, re-save the config. This will activate the new configurations.
+3. If you are ever going to enable Saved Sessions, re-run the hpi-setup script.
+
+    * Open a browser window and navigate to the following URL: `{Alfresco Base URL}/alfresco/s/hpi/setup`
+
+4. Whether or not any updates were made, re-save the config. This will activate the new configurations.
 
 ### Policy and Procedure Updates
 
@@ -142,7 +146,7 @@ Follow these steps to add the above (optional) features to existing Policy and P
       - Control Type: Autocomplete
       - Suggested Options Settings:
         - Picklist: `allGroups`
-          **Note:** you may want to configure a more restrictive group depending on your repository and use case
+          > **Note:** You may want to configure a more restrictive group depending on your repository and use case
         - Help Text: `Groups selected here will receive a notification when this document is Approved, Effective or Obsolete.`
       - Editable, Not Required, Repeating
 
@@ -223,3 +227,49 @@ Follow these steps to add the above (optional) features to existing Policy and P
         - Enable Info Block: `No`
       - Additional Options:
         - Defaults acceptable.  Update as desired
+
+## Upgrading to 3.5.1
+
+If you previously had the Power Promote action configured, navigate to the ACA admin and locate the action configuration for periodic review. Set the sliders for **Require Authentication** and **Add ESignature Page** appropriately for the results you desire.
+
+Refer to the image below of the UI:
+
+![Power Promote]({% link content-accelerator/images/power-promote-options.png %})
+
+If you previously had the Periodic Review action configured, navigate to the ACA admin and locate the action configuration for periodic review. Set the sliders for **Require Authentication** and **Add ESignature Page** appropriately for the results you desire.
+
+> **Note:** If the ACA configurations for your environment were created prior to ACA 3.5.1, the Download Document action must be reconfigured and re-saved in all ACA admin locations where it is referenced.
+
+This is because new functionality was added to the Download Document action and re-saving loads the correct configuration for the action. If this step is not taken, the Download Document action will cause an error for the user, and fail to download the document.
+
+### New Identity Service SSO implementation for ACA 3.5.1
+
+There is an additional option for configuring Single Sign On (SSO) beyond the ACA standard SSO configuration offered in previous releases. This new SSO implementation:
+
+* Is standardized on Identity Service as authentication/authorization provider
+* Supports Logout functionality
+* Is more configurable
+* Only supports implicit flow
+
+If you want to switch your current SSO implementation to the new 3.5.1 SSO implementation, see the additional documentation for this feature in [Single Sign On Support for Content Accelerator]({% link content-accelerator/latest/install/sso.md %}).
+
+Note that this newer SSO implementation is not a replacement for the current SSO offering. The current SSO offering can continue to be used with ACA 3.5.1.
+
+## Upgrading to 3.6 and above
+
+Advanced Search is deprecated in Content Accelerator 3.6. Though it is still available, it is expected to be removed in future releases and replaced with the new Advanced Search capabilities added to attribute search in Content Accelerator 3.6.
+
+To enable advanced capabilities in attribute search, complete the following steps.
+
+1. Navigate to the Attribute Search config in the Alfresco Content Accelerator Admin and set the value of the **Show Advanced Search** parameter to Enabled. By default, the value is set to `Disabled`.
+
+    ![Advanced Search configuration]({% link content-accelerator/images/aca-show-advanced-search-config.png %})
+
+2. After you enable **Advanced Search**, you can enable the following configuration settings:
+
+    * Enable Any/All Search
+    * Enable Like/Exact/Not Search
+
+    ![Advanced Search additional configuration]({% link content-accelerator/images/aca-show-advanced-search-options-config.png %})
+
+> **Note:** If the ACA configuration for your environment was created prior to ACA 3.5.1, the Attribute Search setting must be reconfigured in all ACA admin locations where it is referenced.

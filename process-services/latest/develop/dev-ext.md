@@ -523,13 +523,13 @@ at run-time to an instance of `org.activiti.engine.delegate.JavaDelegate`. Alter
 ```java
 package com.activiti.extension.bean;
 
-import org.activiti.engine.impl.pvm.delegate.ActivityExecution;
+import org.activiti.engine.impl.pvm.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
 
 @Component("helloWorldBean")
 public class HelloWorldBean {
 
-        public void sayHello(ActivityExecution execution) {
+        public void sayHello(DelegateExecution execution) {
                 System.out.println("Hello from " + this);
                 execution.setVariable("var3", " from the bean");
         }
@@ -1431,7 +1431,7 @@ Assuming that you have started to see some data show up in the ElasticSearch sto
             );
     ```
 
-    The log4j configuration required to log queries being sent to ElasticSearch via `executeSearch()` is as follows
+    The log4j 2 configuration required to log queries being sent to ElasticSearch via `executeSearch()` is as follows
 
     ```text
     log4j.logger.com.activiti.service.reporting.AbstractReportGenerator=DEBUG

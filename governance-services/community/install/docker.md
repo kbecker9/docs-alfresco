@@ -11,9 +11,9 @@ Use this information to quickly deploy Governance Services using Docker Compose.
 * [Docker Compose](https://docs.docker.com/compose/install/)
   * Docker Compose is included as part of some Docker installers. If it's not part of your installation, then install it separately after you've installed Docker.
 
-> **Note:** Make sure that the following ports are free on your computer: 5432, 8080, 8082, 8083. These ports are set in the `docker-compose.yml` file.
+> **Note:** Make sure that the following ports are free on your computer: 5432, 8080, 8083. These ports are set in the `docker-compose.yml` file.
 
-## Installation steps
+## Deployment steps
 
 1. Download the Alfresco Community Edition [docker-compose.yml](https://raw.githubusercontent.com/Alfresco/acs-deployment/master/docker-compose/community-docker-compose.yml) file from GitHub.
 
@@ -26,15 +26,15 @@ Use this information to quickly deploy Governance Services using Docker Compose.
     ```text
     services:
         alfresco:
-            #image: alfresco/alfresco-content-repository-community:7.3.0
-            image: alfresco/alfresco-governance-repository-community:7.3.0
+            #image: alfresco/alfresco-content-repository-community:23.2.1
+            image: alfresco/alfresco-governance-repository-community:23.2.1
             ... 
     ```
 
     ```text
         share:
-            #image: alfresco/alfresco-share:7.3.0
-            image: alfresco/alfresco-governance-share-community:7.3.0
+            #image: alfresco/alfresco-share:23.2.1
+            image: alfresco/alfresco-governance-share-community:23.2.1
             ... 
     ```
 
@@ -56,9 +56,9 @@ Use this information to quickly deploy Governance Services using Docker Compose.
 
     ```text
     ...
-    alfresco_1  | 2021-04-07 13:59:36,469 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
-    alfresco_1  | 2021-04-07 13:59:36,469 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
-    alfresco_1  | 2021-04-07 13:59:36,903 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 226026 ms
+    alfresco_1  | ... INFO ... [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+    alfresco_1  | ... INFO ... [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+    alfresco_1  | ... INFO ... [main] org.apache.catalina.startup.Catalina.start Server startup in 226026 ms
     ```
 
     If you encounter errors whilst the system is starting up:
